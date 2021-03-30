@@ -5,16 +5,16 @@ export const theme = createMuiTheme({
     common: { black: "#000", white: "#fff" },
     background: { paper: "#fff", default: "#fafafa" },
     primary: {
-      light: "rgba(79, 91, 98, 1)",
-      main: "rgba(13, 27, 42, 1)",
-      dark: "rgba(0, 10, 18, 1)",
-      contrastText: "#fff",
+      light: "rgba(88, 165, 240, 1)",
+      main: "rgba(2, 119, 189, 1)",
+      dark: "rgba(0, 76, 140, 1)",
+      contrastText: "#fff"
     },
     secondary: {
-      light: "rgba(119, 141, 169, 1)",
-      main: "rgba(65, 90, 119, 1)",
-      dark: "rgba(27, 38, 59, 1)",
-      contrastText: "#fff",
+      light: "#2E2E2E",
+      main: "#212121",
+      dark: "#191919",
+      contrastText: "#fff"
     },
     error: {
       light: "#e57373",
@@ -29,4 +29,9 @@ export const theme = createMuiTheme({
       hint: "rgba(0, 0, 0, 0.38)",
     },
   },
+  mixins: {
+    toolbar: {
+      minHeight: 48,
+    },
+  }
 });
