@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
 
 export default function Dashboard() {
   let { path } = useRouteMatch();
@@ -14,6 +14,9 @@ export default function Dashboard() {
         </Route>
         <Route path={`${path}/brands`}>
           <div> Dashboard brands </div>
+        </Route>
+        <Route path="*">
+          <Redirect to="/" />
         </Route>
       </Switch>
     </>

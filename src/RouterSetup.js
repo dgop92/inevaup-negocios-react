@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import PrivateRoute from "./authentication/PrivateRoute";
 import NotFound from "./components/base/NotFound";
 import Home from "./components/base/Home";
 import Login from "./components/base/Login";
@@ -16,9 +17,7 @@ export default function RouterSetup() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/dashboard">
-          <Dashboard />
-        </Route>
+        <PrivateRoute path="/dashboard" component={Dashboard} />
         <Route path="*">
           <NotFound />
         </Route>
