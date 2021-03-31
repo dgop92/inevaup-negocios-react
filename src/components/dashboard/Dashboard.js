@@ -58,14 +58,14 @@ export default function Dashboard() {
       <div className={classes.app}>
         <Header onDrawerToggle={handleDrawerToggle} />
         <main className={classes.main}>
-          <RouterContent />
+          <DashboardContent />
         </main>
       </div>
     </div>
   );
 }
 
-function RouterContent() {
+function DashboardContent() {
   let { path } = useRouteMatch();
 
   return (

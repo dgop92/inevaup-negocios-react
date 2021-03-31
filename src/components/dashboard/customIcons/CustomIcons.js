@@ -1,6 +1,7 @@
 import SvgIcon from "@material-ui/core/SvgIcon";
 import { ReactComponent as BrandIco } from "./cubes-solid.svg";
 import { ReactComponent as CatalogueIco } from "./book-solid.svg";
+import { ReactComponent as ProductIco } from "./shopping-basket-solid.svg";
 import { ReactComponent as ProviderIco } from "./truck-loading-solid.svg";
 import { ReactComponent as EntryIco } from "./chevron-circle-left-solid.svg";
 import { ReactComponent as ExitIco } from "./chevron-circle-right-solid.svg";
@@ -25,6 +26,14 @@ export function ProviderIcon() {
   return (
     <SvgIcon>
       <ProviderIco />
+    </SvgIcon>
+  );
+}
+
+export function ProductIcon() {
+  return (
+    <SvgIcon>
+      <ProductIco />
     </SvgIcon>
   );
 }

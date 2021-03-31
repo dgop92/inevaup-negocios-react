@@ -9,11 +9,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import GroupIcon from "@material-ui/icons/Group";
 import HomeIcon from "@material-ui/icons/Home";
-
+import { useRouteMatch, NavLink } from "react-router-dom";
 import {
   BrandIcon,
   CatalogueIcon,
   ProviderIcon,
+  ProductIcon,
   EntryIcon,
   ExitIcon,
 } from "./customIcons/CustomIcons";
@@ -22,18 +23,19 @@ const categories = [
   {
     id: "Administración",
     children: [
-      { id: "Home", icon: <HomeIcon />, active: true },
-      { id: "Marcas", icon: <BrandIcon /> },
-      { id: "Catálogos", icon: <CatalogueIcon /> },
-      { id: "Provedores", icon: <ProviderIcon /> },
-      { id: "Usuarios", icon: <GroupIcon /> },
+      { id: "Home", icon: <HomeIcon />, pathName: "" },
+      { id: "Marcas", icon: <BrandIcon />, pathName: "/brands"},
+      { id: "Catálogos", icon: <CatalogueIcon />, pathName: "/catalogues" },
+      { id: "Productos", icon: <ProductIcon />, pathName: "/products"},
+      { id: "Provedores", icon: <ProviderIcon />, pathName: "/providers"},
+      { id: "Usuarios", icon: <GroupIcon />, pathName: "/users" },
     ],
   },
   {
     id: "Negocio",
     children: [
-      { id: "Entradas", icon: <EntryIcon /> },
-      { id: "Salidas", icon: <ExitIcon /> },
+      { id: "Entradas", icon: <EntryIcon />, pathName: "/entries" },
+      { id: "Salidas", icon: <ExitIcon />, pathName: "/exits"},
     ],
   },
 ];
@@ -60,12 +62,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
-  firebase: {
+  drawerTitle: {
     fontSize: 20,
     color: theme.palette.common.white,
   },
   itemActiveItem: {
-    color: "#4fc3f7",
+    color: theme.palette.primary.light,
   },
   itemPrimary: {
     fontSize: "inherit",
@@ -88,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
 function Navigator(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const { path: currPath } = useRouteMatch();
 
   return (
     <Drawer
@@ -102,7 +105,11 @@ function Navigator(props) {
     >
       <List disablePadding>
         <ListItem
-          className={clsx(classes.firebase, classes.item, classes.itemCategory)}
+          className={clsx(
+            classes.drawerTitle,
+            classes.item,
+            classes.itemCategory
+          )}
         >
           Inevaup Negocios
         </ListItem>
@@ -119,27 +126,51 @@ function Navigator(props) {
               {id}
             </ListItemText>
           </ListItem>
-          {children.map(({ id: childId, icon, active }) => (
-            <ListItem
+          {children.map(({ id: childId, icon, pathName }) => (
+            <ListItemLink
               key={childId}
-              button
-              className={clsx(classes.item, active && classes.itemActiveItem)}
-            >
-              <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-              <ListItemText
-                classes={{
-                  primary: classes.itemPrimary,
-                }}
-              >
-                {childId}
-              </ListItemText>
-            </ListItem>
+              to={`${currPath}${pathName}`}
+              text={childId}
+              icon={icon}
+              classes={classes}
+            ></ListItemLink>
           ))}
 
           <Divider className={classes.divider} />
         </React.Fragment>
       ))}
     </Drawer>
+  );
+}
+
+function ListItemLink(props) {
+  const { to, icon, text, classes } = props;
+
+  const renderLink = React.useMemo(
+    () =>
+      React.forwardRef((itemProps, ref) => (
+        <NavLink
+          to={to}
+          activeClassName={classes.itemActiveItem}
+          exact
+          ref={ref}
+          {...itemProps}
+        />
+      )),
+    [to, classes.itemActiveItem]
+  );
+
+  return (
+    <ListItem className={classes.item} button component={renderLink}>
+      <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+      <ListItemText
+        classes={{
+          primary: classes.itemPrimary,
+        }}
+      >
+        {text}
+      </ListItemText>
+    </ListItem>
   );
 }
 
