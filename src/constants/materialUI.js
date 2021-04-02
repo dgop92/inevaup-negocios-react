@@ -1,20 +1,20 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core/styles";
 
 export const theme = createMuiTheme({
   palette: {
     common: { black: "#000", white: "#fff" },
-    background: { paper: "#fff", default: "#fafafa" },
+    background: { paper: "#fff", default: "#fafafa", dashboardMain: "#eaeff1" },
     primary: {
       light: "rgba(88, 165, 240, 1)",
       main: "rgba(2, 119, 189, 1)",
       dark: "rgba(0, 76, 140, 1)",
-      contrastText: "#fff"
+      contrastText: "#fff",
     },
     secondary: {
       light: "#2E2E2E",
       main: "#212121",
       dark: "#191919",
-      contrastText: "#fff"
+      contrastText: "#fff",
     },
     error: {
       light: "#e57373",
@@ -33,5 +33,5 @@ export const theme = createMuiTheme({
     toolbar: {
       minHeight: 48,
     },
-  }
+  },
 });

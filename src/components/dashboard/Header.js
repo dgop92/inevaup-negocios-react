@@ -44,7 +44,7 @@ export default function Header({ onDrawerToggle }) {
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
-            <Hidden smUp>
+            <Hidden mdUp>
               <Grid item>
                 <IconButton
                   color="inherit"

@@ -5,14 +5,15 @@ import Hidden from "@material-ui/core/Hidden";
 import Navigator from "./Navigator";
 import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import BrandView from "./pages/BrandView";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    minHeight: "100vh",
+    height: "100vh",
   },
   drawer: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       width: 256,
       flexShrink: 0,
     },
@@ -21,11 +22,12 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     display: "flex",
     flexDirection: "column",
+    overflowY: "auto",
   },
   main: {
     flex: 1,
-    padding: theme.spacing(6, 4),
-    background: "#eaeff1",
+    background: theme.palette.background.dashboardMain,
+    padding: theme.spacing(2),
   },
 }));
 
@@ -43,7 +45,7 @@ export default function Dashboard() {
       <CssBaseline />
       <nav className={classes.drawer}>
         {/* Mobile responsive */}
-        <Hidden smUp implementation="js">
+        <Hidden mdUp implementation="js">
           <Navigator
             variant="temporary"
             open={mobileOpen}
@@ -51,8 +53,8 @@ export default function Dashboard() {
           />
         </Hidden>
         {/* Fixed */}
-        <Hidden xsDown implementation="css">
-          <Navigator/>
+        <Hidden smDown implementation="css">
+          <Navigator />
         </Hidden>
       </nav>
       <div className={classes.app}>
@@ -74,7 +76,7 @@ function DashboardContent() {
         <div> Dashboard Home </div>
       </Route>
       <Route path={`${path}/brands`}>
-        <div> Dashboard brands </div>
+        <BrandView />
       </Route>
       <Route path="*">
         <Redirect to="/" />

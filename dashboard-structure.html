@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+    .makeStyles-root-1 {
+      display: flex;
+      height: 100vh;
+      background-color: blueviolet;
+    }
+
+    .sidebar {
+      width: 256px;
+      flex-shrink: 0;
+      background-color: aquamarine;
+    }
+
+    .inner-sidebar {
+      width: 256px;
+      left: 0;
+      top: 0;
+      right: auto;
+      /* display: flex;
+      flex: 1 0 auto;
+      flex-direction: column; */
+      height: 100%;
+      outline: 0;
+      z-index: 1200;
+      position: fixed;
+      overflow-y: auto;
+      background-color: rgb(129, 127, 127);
+    }
+    /* makeStyles-app-3 */
+    .makeStyles-app-3 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: "#f7faf7";
+      overflow-y: scroll;
+    }
+    .header {
+      top: 0;
+      left: auto;
+      right: 0;
+      height: 50px;
+      position: sticky;
+
+      width: 100%;
+      display: flex;
+      z-index: 1100;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      flex-direction: column;
+
+      background-color: bisque;
+      width: 100%;
+    }
+
+    .main-content {
+      padding: 1rem;
+      background-color: yellowgreen;
+      flex: 1;
+    }
+
+    .temp-text {
+      font-size: 3rem;
+    }
+    .large-div {
+      width: 800px;
+      height: 50px;
+      background-color: brown;
+    }
+    .card {
+      width: 100%;
+      /* height: 200px; */
+      overflow-x: scroll;
+
+      background-color: white;
+    }
+  </style>
+  <body>
+    <div class="makeStyles-root-1">
+      <div class="sidebar">
+          <div class="inner-sidebar">
+            Here sidebar
+          </div>
+      </div>
+      <div class="makeStyles-app-3">
+        <div class="header"></div>
+        <div class="main-content">
+          <div class="card">
+            <div class="large-div"> a large div......</div>
+          </div>
+          <p class="temp-text">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum,
+            ratione possimus. Tempore, accusantium eum. Deserunt omnis aliquam
+            tenetur culpa consequatur quod excepturi qui ullam neque, ex iusto
+            at mollitia doloribus. asd asd Lorem ipsum, dolor sit amet
+            consectetur adipisicing elit. Qui cupiditate molestiae,
+            perferendis, dolorum minus repellat consequatur accusamus et magni
+            iste harum aut beatae corporis quis quia! Fugiat eius quasi,
+            mollitia perspiciatis maxime aspernatur nemo voluptatem fugit
+            commodi adipisci aliquam inventore autem! Dolorem illum quibusdam
+            fugit rerum architecto accusamus deleniti harum.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
