@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Toolbar from "@material-ui/core/Toolbar";
 import clsx from "clsx";
 import Paper from "@material-ui/core/Paper";
@@ -11,7 +11,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import ItemTable from "../commons/ItemTable";
+import DjangoPaginationTable from "../commons/DjangoPaginationTable";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles((theme) => ({
   viewTitle: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   selectContainer: {
     width: "100%",
-    maxWidth: 200,
+    maxWidth: 300,
   },
 }));
 
@@ -85,61 +86,54 @@ export default function BrandView() {
   );
 }
 
-const columns = [
-  {
-    name: "Nombre",
-    dataName: "name",
-  },
-];
-
-const rows = [
-  {
-    pk: 1,
-    name: "Nike",
-  },
-  {
-    pk: 2,
-    name: "Huwawei",
-  },
-  {
-    pk: 5,
-    name: "Appel",
-  },
-  {
-    pk: 6,
-    name: "iris",
-  },
-  {
-    pk: 7,
-    name: "Magia",
-  },
-  {
-    pk: 71,
-    name: "Papel",
-  },
-  {
-    pk: 9,
-    name: "Carro",
-  },
-];
+const colunmData = {
+  fieldKey: "pk",
+  columns: [
+    {
+      field: "name",
+      headerName: "Nombre",
+    },
+  ],
+};
 
 function PaperView({ paperViewClass }) {
+  const [queryOptions, setQueryOptions] = useState({
+    search: "",
+    ordering: "name",
+  });
+
   return (
     <Paper className={paperViewClass}>
-      <PaperHeader />
-      <ItemTable columns={columns} rows={rows} colunmKey={"pk"} />
+      <PaperHeader
+        queryOptions={queryOptions}
+        setQueryOptions={setQueryOptions}
+      />
+      <DjangoPaginationTable
+        endPoint="dashboard/brands"
+        columnData={colunmData}
+        tableStyles={{ minWidth: 350 }}
+        queryOptions={queryOptions}
+      />
     </Paper>
   );
 }
 
-function PaperHeader() {
+function PaperHeader({ queryOptions, setQueryOptions }) {
   const classes = useStyles();
+
+  const handleQueryOptionsChange = (event) => {
+    const inputKey = event.target.name;
+    const inputValue = event.target.value;
+    const newPair = {};
+    newPair[inputKey] = inputValue;
+    setQueryOptions({ ...queryOptions, ...newPair });
+  };
 
   return (
     <div className={classes.paperHeader}>
       <div className={clsx(classes.searchContainer, classes.headerItem)}>
         <TextField
-          // className={classes.margin}
+          name="search"
           placeholder="Buscar"
           variant="outlined"
           fullWidth
@@ -151,7 +145,23 @@ function PaperHeader() {
               </InputAdornment>
             ),
           }}
+          onChange={handleQueryOptionsChange}
         />
+      </div>
+      <div className={clsx(classes.selectContainer, classes.headerItem)}>
+        <TextField
+          name="ordering"
+          label="Ordenar"
+          variant="outlined"
+          fullWidth
+          size="small"
+          select
+          value={queryOptions.ordering}
+          onChange={handleQueryOptionsChange}
+        >
+          <MenuItem value={"name"}>Nombre (Acendente)</MenuItem>
+          <MenuItem value={"-name"}>Nombre (Decendente)</MenuItem>
+        </TextField>
       </div>
     </div>
   );
