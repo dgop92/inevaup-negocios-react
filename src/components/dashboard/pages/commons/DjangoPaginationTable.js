@@ -16,8 +16,8 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import useFetch from "use-http";
-import ArrowForward from "@material-ui/icons/ArrowForward";
-import Edit from "@material-ui/icons/Edit";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -164,7 +164,7 @@ export default function DjangoPaginationTable({
                     to={`${pathName}/update/${row[columnData.fieldKey]}`}
                     color="secondary"
                   >
-                    <Edit />
+                    <EditIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Ver más">
@@ -173,7 +173,7 @@ export default function DjangoPaginationTable({
                     to={`${pathName}/view/${row[columnData.fieldKey]}`}
                     color="secondary"
                   >
-                    <ArrowForward />
+                    <ArrowForwardIcon />
                   </IconButton>
                 </Tooltip>
               </TableCell>

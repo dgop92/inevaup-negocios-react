@@ -5,7 +5,7 @@ import Hidden from "@material-ui/core/Hidden";
 import Navigator from "./Navigator";
 import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import BrandList from "./pages/BrandList";
+import BrandRouter from "./pages/brand/BrandRouter";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,10 +76,10 @@ function DashboardContent() {
         <div> Dashboard Home </div>
       </Route>
       <Route path={`${path}/brands`}>
-        <BrandList />
+        <BrandRouter/>
       </Route>
       <Route path="*">
-        <Redirect to="/" />
+        <Redirect to={path} />
       </Route>
     </Switch>
   );

@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.typography.fontSize,
     textTransform: "none",
   },
+  toolbar: {
+    padding: `0 ${theme.spacing(2)}px`,
+  },
 }));
 
 export default function SimplePageHeader({ title, buttonProps }) {
@@ -26,7 +29,7 @@ export default function SimplePageHeader({ title, buttonProps }) {
   buttonProps.to = buttonProps.to || `${window.location.pathname}/create`;
 
   return (
-    <Toolbar disableGutters>
+    <Toolbar disableGutters className={classes.toolbar}>
       <Grid container alignItems="center">
         <Grid item sm xs={12}>
           <Typography
