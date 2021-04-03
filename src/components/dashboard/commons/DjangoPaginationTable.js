@@ -122,6 +122,8 @@ export default function DjangoPaginationTable({
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const pathName = window.location.pathname;
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -159,7 +161,7 @@ export default function DjangoPaginationTable({
                 <Tooltip title="Editar">
                   <IconButton
                     component={RouterLink}
-                    to={`/dashboard/brands/update/${row[columnData.fieldKey]}`}
+                    to={`${pathName}/update/${row[columnData.fieldKey]}`}
                     color="secondary"
                   >
                     <Edit />
@@ -168,7 +170,7 @@ export default function DjangoPaginationTable({
                 <Tooltip title="Ver más">
                   <IconButton
                     component={RouterLink}
-                    to={`/dashboard/brands/view/${row[columnData.fieldKey]}`}
+                    to={`${pathName}/view/${row[columnData.fieldKey]}`}
                     color="secondary"
                   >
                     <ArrowForward />
