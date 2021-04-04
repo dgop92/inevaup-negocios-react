@@ -6,6 +6,9 @@ import Navigator from "./Navigator";
 import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import BrandRouter from "./pages/brand/BrandRouter";
+import CatalogueRouter from "./pages/catalogue/CatalogueRouter";
+import ProductRouter from "./pages/product/ProductRouter";
+import ProviderRouter from "./pages/provider/ProviderRouter";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,15 +75,12 @@ function DashboardContent() {
 
   return (
     <Switch>
-      <Route exact path={path}>
-        <div> Dashboard Home </div>
-      </Route>
-      <Route path={`${path}/brands`}>
-        <BrandRouter/>
-      </Route>
-      <Route path="*">
-        <Redirect to={path} />
-      </Route>
+      <Route exact path={path} children={<div> Dashboard Home </div>} />
+      <Route path={`${path}/brands`} children={<BrandRouter />} />
+      <Route path={`${path}/catalogues`} children={<CatalogueRouter />} />
+      <Route path={`${path}/products`} children={<ProductRouter />} />
+      <Route path={`${path}/providers`} children={<ProviderRouter />} />
+      <Route path="*" children={<Redirect to={path} />} />
     </Switch>
   );
 }

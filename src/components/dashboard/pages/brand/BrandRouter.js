@@ -7,18 +7,10 @@ export default function BrandRouter() {
   let { path } = useRouteMatch();
   return (
     <Switch>
-      <Route exact path={path}>
-        <BrandList />
-      </Route>
-      <Route path={`${path}/create`}>
-        <div>Create brand</div>
-      </Route>
-      <Route path={`${path}/view/:id`}>
-        <BrandView />
-      </Route>
-      <Route path={`${path}/update/:id`}>
-        <div>Update Brand</div>
-      </Route>
+      <Route exact path={path} children={<BrandList />}/>
+      <Route path={`${path}/create`} children={<div>Create brand</div>}/>
+      <Route path={`${path}/view/:id`} children={<BrandView />}/>
+      <Route path={`${path}/update/:id`} children={<div>Update Brand</div>}/>
     </Switch>
   );
 }

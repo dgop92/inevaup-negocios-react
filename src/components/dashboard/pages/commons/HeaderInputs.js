@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MenuItem from "@material-ui/core/MenuItem";
 import Box from "@material-ui/core/Box";
+import useFetch from "use-http";
 
 //350, 300
 export function SearchBar({ handleInputChange, inputContainerStyles }) {
@@ -51,7 +52,44 @@ export function OrderingBar({
             {orderItem.label}
           </MenuItem>
         ))}
+      </TextField>
+    </HeaderInputContainer>
+  );
+}
 
+export function FilterBar({
+  filterOptions,
+  queryOptions,
+  handleInputChange,
+  inputContainerStyles,
+}) {
+
+  const { data: getData = { results: [] } } = useFetch(
+    filterOptions.endPoint,
+    []
+  );
+
+  return (
+    <HeaderInputContainer inputContainerStyles={inputContainerStyles}>
+      <TextField
+        name={filterOptions.filterName}
+        label={filterOptions.label}
+        variant="outlined"
+        fullWidth
+        size="small"
+        select
+        value={queryOptions[filterOptions.filterName]}
+        onChange={handleInputChange}
+      >
+        <MenuItem value={"all"}>Todos</MenuItem>
+        {getData.results.map((item) => (
+          <MenuItem
+            key={item[filterOptions.retrieveField]}
+            value={item[filterOptions.retrieveField]}
+          >
+            {item[filterOptions.retrieveField]}
+          </MenuItem>
+        ))}
       </TextField>
     </HeaderInputContainer>
   );

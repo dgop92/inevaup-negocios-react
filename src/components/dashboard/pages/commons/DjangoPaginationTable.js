@@ -234,7 +234,7 @@ function TableHeader({ columns }) {
 function fromObjectToQuery(enpoint, queryOptions) {
   const myUrl = new URL("http://127.0.0.1:8000");
   for (const property in queryOptions) {
-    if (queryOptions[property]) {
+    if (queryOptions[property] && queryOptions[property] !== "all") {
       myUrl.searchParams.append(property, queryOptions[property]);
     }
   }

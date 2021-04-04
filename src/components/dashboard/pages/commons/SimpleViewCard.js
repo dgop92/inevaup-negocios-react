@@ -27,7 +27,7 @@ const useCardStyles = makeStyles((theme) => ({
 
 export default function SimpleViewCard(props) {
   const classes = useCardStyles();
-  
+
   return (
     <Card className={classes.baseCard}>
       <CardHeader
@@ -42,25 +42,7 @@ export default function SimpleViewCard(props) {
         {props.children}
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button
-          component={RouterLink}
-          to={props.updatePath}
-          variant="text"
-          color="primary"
-          size="small"
-          startIcon={<EditIcon />}
-        >
-          Modificar
-        </Button>
-        <DeleteButton
-          component={RouterLink}
-          variant="text"
-          color="primary"
-          size="small"
-          startIcon={<DeleteIcon />}
-        >
-          Eliminar
-        </DeleteButton>
+        <FooterViewButton updatePath={props.updatePath}/>
       </CardActions>
     </Card>
   );
@@ -74,3 +56,29 @@ const DeleteButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+export function FooterViewButton({ updatePath, onDelete }) {
+  return (
+    <React.Fragment>
+      <Button
+        component={RouterLink}
+        to={updatePath}
+        variant="text"
+        color="primary"
+        size="small"
+        startIcon={<EditIcon />}
+      >
+        Modificar
+      </Button>
+      <DeleteButton
+        variant="text"
+        color="primary"
+        size="small"
+        startIcon={<DeleteIcon />}
+        onClick={onDelete}
+      >
+        Eliminar
+      </DeleteButton>
+    </React.Fragment>
+  );
+}
