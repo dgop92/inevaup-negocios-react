@@ -138,19 +138,23 @@ export default function DjangoPaginationTable({
     ...queryOptions,
   });
 
+  /*
+  if a brand or catalogue is not used in any product, it will rise a 400 error */
   const {
     data: getData = { count: 0, results: [] },
   } = useFetch(paginationEndpoint, [page, rowsPerPage, queryOptions]);
 
+  const rowCount = getData.count || 0;
+
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, getData.count - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rowCount - page * rowsPerPage);
 
   return (
     <TableContainer style={tableContainerStyles} component={Paper}>
       <Table style={tableStyles} aria-label="tabla de paginación">
         <TableHeader columns={columnData.columns} />
         <TableBody>
-          {getData.results.map((row) => (
+          {getData?.results?.map((row) => (
             <TableRow key={row[columnData.fieldKey]}>
               {columnData.columns.map((colunm, index) => (
                 <TableCell key={index} {...colunm.cellProps}>
@@ -191,7 +195,7 @@ export default function DjangoPaginationTable({
             <TablePagination
               rowsPerPageOptions={[3, 5, 8]}
               colSpan={3}
-              count={getData.count}
+              count={rowCount}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

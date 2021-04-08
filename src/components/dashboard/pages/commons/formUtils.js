@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import useFetch from "use-http";
+import TextField from "@material-ui/core/TextField";
+import { Controller } from "react-hook-form";
+import MenuItem from "@material-ui/core/MenuItem";
 
 export default function SimpleForm({
   headerTitle,
@@ -84,13 +88,50 @@ export function FormFooter({ title, loading, boxProps }) {
           style={{ flexGrow: 1, alignSelf: "center", margin: "0 2rem" }}
         />
       )}
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-      >
+      <Button type="submit" variant="contained" color="primary">
         {title}
       </Button>
     </Box>
+  );
+}
+
+export function ForeginSelect({ selectOptions, control }) {
+  const { data: getData = { results: [] } } = useFetch(
+    selectOptions.endPoint,
+    []
+  );
+
+  const [selectValue, setSelectValue] = useState(selectOptions.defaultValue);
+
+  const handleChange = (event) => {
+    setSelectValue(event.target.value);
+  };
+
+  return (
+    <Controller
+      name={selectOptions.fieldName}
+      label={selectOptions.label}
+      as={TextField}
+      control={control}
+      defaultValue={selectOptions.defaultValue}
+      variant="outlined"
+      fullWidth
+      size="small"
+      select
+      value={selectValue}
+      onChange={handleChange}
+    >
+      <MenuItem value={selectOptions.defaultValue}>
+        {selectOptions.defaultValue}
+      </MenuItem>
+      {getData.results.map((item) => (
+        <MenuItem
+          key={item[selectOptions.retrieveField]}
+          value={item[selectOptions.retrieveField]}
+        >
+          {item[selectOptions.retrieveField]}
+        </MenuItem>
+      ))}
+    </Controller>
   );
 }

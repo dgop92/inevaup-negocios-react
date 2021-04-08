@@ -7,7 +7,14 @@ export function useFormRequest(itemPath, updatePk) {
 
   const endPoint = updatePk ? `${itemPath}${updatePk}` : itemPath;
 
-  const { register, handleSubmit, setValue, setError, errors } = useForm();
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    errors,
+  } = useForm();
   const { get, post, put, response, loading, data: resData } = useFetch();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -37,7 +44,15 @@ export function useFormRequest(itemPath, updatePk) {
     }
   }, [updatePk, loadDefaultData]);
 
-  return { register, onSubmit, errors, loading, nonFieldErros, successPath };
+  return {
+    control,
+    register,
+    onSubmit,
+    errors,
+    loading,
+    nonFieldErros,
+    successPath,
+  };
 }
 
 export function setResponseErrors(setError, responseErrors) {
