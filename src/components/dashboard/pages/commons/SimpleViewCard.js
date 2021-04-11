@@ -42,7 +42,10 @@ export default function SimpleViewCard(props) {
         {props.children}
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <FooterViewButton updatePath={props.updatePath}/>
+        <FooterViewButton
+          onDelete={props.onDelete}
+          updatePath={props.updatePath}
+        />
       </CardActions>
     </Card>
   );

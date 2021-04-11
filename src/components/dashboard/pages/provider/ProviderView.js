@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../commons/SimplePageHeader";
 import { useParams } from "react-router";
@@ -6,6 +6,7 @@ import Box from "@material-ui/core/Box";
 import SimpleViewTable from "../commons/SimpleViewTable";
 import useFetch from "use-http";
 import SimpleViewCard from "../commons/SimpleViewCard";
+import DeleteModal from "../commons/DeleteModal";
 
 const keysData = [
   {
@@ -45,11 +46,21 @@ function MainContent() {
   const updatePath = `${itemPath}/update/${id}`;
   const { data: providerData = {} } = useFetch(`${itemPath}/${id}`, []);
 
+  const [modal, setModal] = useState(false);
+
   return (
-    <Box mt={2} display="flex" justifyContent="center">
-      <SimpleViewCard updatePath={updatePath}>
-        <SimpleViewTable keysData={keysData} data={providerData} />
-      </SimpleViewCard>
-    </Box>
+    <React.Fragment>
+      <DeleteModal
+        open={modal}
+        setModal={setModal}
+        itemPath={itemPath}
+        pkPath={`/${id}`}
+      ></DeleteModal>
+      <Box mt={2} display="flex" justifyContent="center">
+        <SimpleViewCard onDelete={() => setModal(true)} updatePath={updatePath}>
+          <SimpleViewTable keysData={keysData} data={providerData} />
+        </SimpleViewCard>
+      </Box>
+    </React.Fragment>
   );
 }
