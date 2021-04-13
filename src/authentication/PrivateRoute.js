@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useAuth } from "./authUtils";
+import { useApiUtils } from "./APIUtils";
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const { authToken } = useAuth();
+  const { authToken } = useApiUtils();
   
   return (
     <Route

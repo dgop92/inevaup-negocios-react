@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { useForm } from "react-hook-form";
 import useFetch from "use-http";
-import { useAuth } from "../../authentication/authUtils";
+import { useApiUtils } from "../../authentication/APIUtils";
 
 import { Redirect } from "react-router-dom";
 
@@ -62,7 +62,7 @@ export default function SignInSide() {
   const { register, handleSubmit, errors } = useForm();
   const { post, response, loading, data: loginErrors } = useFetch();
 
-  const { authToken, setAuthToken } = useAuth();
+  const { authToken, setAuthToken } = useApiUtils();
 
   const onSubmit = async (data) => {
     const loginData = await post("auth/login/", data);
