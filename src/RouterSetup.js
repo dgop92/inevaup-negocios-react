@@ -7,31 +7,51 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import PrivateRoute from "./authentication/PrivateRoute";
-import NotFound from "./components/htppErrors/NotFound";
 import Home from "./components/base/Home";
 import Login from "./components/base/Login";
-import InternalError from "./components/htppErrors/InternalError";
 import Dashboard from "./components/dashboard/Dashboard";
-import Forbbiden from "./components/htppErrors/Forbbiden";
-import NoAuthentication from "./components/htppErrors/NoAuthentication";
-import PageNotFound from "./components/base/PageNotFound";
+import ErrorPage from "./components/base/ErrorPage";
 import { useApiUtils } from "./authentication/APIUtils";
+
+const errorRoutes = [
+  {
+    path: "/500",
+    compProps: {
+      title: "500",
+      subTitle: "Error interno en el servidor",
+    },
+  },
+  {
+    path: "/404",
+    compProps: {
+      title: "404",
+      subTitle: "Recurso no encontrado",
+    },
+  },
+  {
+    path: "//403",
+    compProps: {
+      title: "403",
+      subTitle: "Sin permiso para acceder a esta página",
+    },
+  },
+];
 
 export default function RouterSetup() {
   const { httpStatus } = useApiUtils();
   return (
     <Router>
       {httpStatus ? (
-        <React.Fragment>
+        <Switch>
           <Route path="/errors" component={HttpError} />
           <Redirect to={`/errors/${httpStatus}`} />
-        </React.Fragment>
+        </Switch>
       ) : (
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/dashboard" component={Dashboard} />
-          <Route path="*" component={PageNotFound} />
+          <Route path="*" component={ErrorPage} />
         </Switch>
       )}
     </Router>
@@ -43,11 +63,12 @@ function HttpError() {
 
   return (
     <Switch>
-      <Route path={`${path}/500`} component={InternalError} />
-      <Route path={`${path}/404`} component={NotFound} />
-      <Route path={`${path}/403`} component={Forbbiden} />
-      <Route path={`${path}/401`} component={NoAuthentication} />
-      <Route path="*" component={PageNotFound} />
+      {errorRoutes.map((errorRoute, i) => (
+        <Route key={i} path={`${path}${errorRoute.path}`}>
+          <ErrorPage {...errorRoute.compProps} />
+        </Route>
+      ))}
+      <Route path="*" component={ErrorPage} />
     </Switch>
   );
 }
