@@ -9,7 +9,6 @@ import Divider from "@material-ui/core/Divider";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import useFetch from "use-http";
-import { Redirect } from "react-router";
 
 const modalStyles = {
   top: "50%",
@@ -33,21 +32,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//<Redirect to={itemPath} />;
 export default function DeleteModal({
   open,
   setModal,
-  itemPath,
-  pkPath,
+  deletePath,
   protectedErrorMessage,
-  noredirect
+  onSuccessDelete,
 }) {
   const classes = useStyles();
 
-  const { del, response } = useFetch(`${itemPath}${pkPath}`);
+  const { del, response } = useFetch(deletePath);
 
   const deleteItem = () => del();
 
-  if (!noredirect && response?.ok) return <Redirect to={itemPath} />;
+  if (response?.ok) {
+    if (onSuccessDelete) {
+      const newComponent = onSuccessDelete();
+      if (newComponent) {
+        return newComponent;
+      }
+    }
+  }
 
   return (
     <Modal

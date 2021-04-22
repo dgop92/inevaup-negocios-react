@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../commons/SimplePageHeader";
-import { useParams } from "react-router";
+import { Redirect, useParams } from "react-router";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
@@ -94,6 +94,8 @@ function MainContent() {
   const { totalUnits, totalSpent } = getComputedData(
     entryData?.entry_purchases
   );
+  
+  const onSuccessDelete = () => <Redirect to={itemPath} />;
 
   return (
     <React.Fragment>
@@ -101,9 +103,9 @@ function MainContent() {
         <DeleteModal
           open={modal}
           setModal={setModal}
-          itemPath={itemPath}
-          pkPath={`/${id}`}
+          deletePath={`${itemPath}/${id}`}
           protectedErrorMessage="Elimina todas las compras hechas con esta entrada primero"
+          onSuccessDelete={onSuccessDelete}
         ></DeleteModal>
       )}
       <Box mt={2} display="flex" justifyContent="center">
@@ -195,18 +197,15 @@ function PurchaseCardList() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [updatePk, setUpdatePk] = useState(0);
 
-  const { register, onSubmit, errors, loading, successPath } = useFormRequest(
-    "/dashboard/purchases/",
-    updatePk,
-    true
-  );
+  const onSuccess = () => console.log("YES SNAKBAR");
+  const itemPath = "/dashboard/purchases/"
 
-  useEffect(() => {
-    if (successPath) {
-      console.log("YES SNAKBAR");
-      setUpdateModal(false);
-    }
-  }, [setUpdateModal, successPath]);
+  const { register, onSubmit, errors, loading } = useFormRequest({
+    itemPath: itemPath,
+    updatePk: updatePk,
+    updateWithPatch: true,
+    onSuccess: onSuccess,
+  });
 
   const rowActions = {
     onUpdate: (pk) => {
@@ -225,9 +224,9 @@ function PurchaseCardList() {
         <DeleteModal
           open={deleteModal}
           setModal={setDeleteModal}
-          itemPath="/dashboard/purchases"
-          pkPath={`/${updatePk}`}
+          deletePath={`${itemPath}${id}`}
           noredirect={true}
+          onSuccessDelete = {() => console.log("SNACK BAR")}
         ></DeleteModal>
       )}
       {updateModal && (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../commons/SimplePageHeader";
-import { useParams } from "react-router";
+import { Redirect, useParams } from "react-router";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
@@ -35,14 +35,16 @@ function MainContent() {
 
   const [modal, setModal] = useState(false);
 
+  const onSuccessDelete = () => <Redirect to={itemPath} />
+
   return (
     <React.Fragment>
       <DeleteModal
         open={modal}
         setModal={setModal}
-        itemPath={itemPath}
-        pkPath={`/${id}`}
+        deletePath={`${itemPath}/${id}`}
         protectedErrorMessage="Este producto está siendo usado en otros registros"
+        onSuccessDelete={onSuccessDelete}
       ></DeleteModal>
       <Box mt={2} display="flex" justifyContent="center">
         <Paper style={{ width: "100%", maxWidth: 950, padding: "1.5rem" }}>

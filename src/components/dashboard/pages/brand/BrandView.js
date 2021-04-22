@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../commons/SimplePageHeader";
-import { useParams } from "react-router";
+import { Redirect, useParams } from "react-router";
 import Box from "@material-ui/core/Box";
 import SimpleViewTable from "../commons/SimpleViewTable";
 import useFetch from "use-http";
@@ -40,14 +40,16 @@ function MainContent() {
 
   const [modal, setModal] = useState(false);
 
+  const onSuccessDelete = () => <Redirect to={itemPath} />;
+
   return (
     <React.Fragment>
       <DeleteModal
         open={modal}
         setModal={setModal}
-        itemPath={itemPath}
-        pkPath={`/${id}`}
+        deletePath={`${itemPath}/${id}`}
         protectedErrorMessage="Esta marca está siendo usada en uno o varios productos"
+        onSuccessDelete={onSuccessDelete}
       ></DeleteModal>
       <Box mt={2} display="flex" justifyContent="center">
         <SimpleViewCard onDelete={() => setModal(true)} updatePath={updatePath}>

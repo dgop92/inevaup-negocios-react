@@ -62,7 +62,7 @@ function FormContainer({ headerTitle, buttonTitle, updatePk }) {
     loading,
     nonFieldErros,
     successPath,
-  } = useFormRequest(itemPath, updatePk);
+  } = useFormRequest({itemPath: itemPath, updatePk: updatePk});
 
   if (successPath) return <Redirect to={successPath} />;
 
