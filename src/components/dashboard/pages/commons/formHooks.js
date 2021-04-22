@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import useFetch from "use-http";
 
-export function useFormRequest(itemPath, updatePk) {
+export function useFormRequest(itemPath, updatePk, updateWithPatch) {
   const [successPath, setSuccessPath] = useState("");
 
   const endPoint = updatePk ? `${itemPath}${updatePk}` : itemPath;
@@ -15,12 +15,22 @@ export function useFormRequest(itemPath, updatePk) {
     setError,
     errors,
   } = useForm();
-  const { get, post, put, response, loading, data: resData } = useFetch();
+  const {
+    get,
+    post,
+    put,
+    patch,
+    response,
+    loading,
+    data: resData,
+  } = useFetch();
 
   const onSubmit = handleSubmit(async (data) => {
     let responseData;
     if (updatePk) {
-      responseData = await put(endPoint, data);
+      responseData = updateWithPatch
+        ? await patch(endPoint, data)
+        : await put(endPoint, data);
     } else {
       responseData = await post(endPoint, data);
     }

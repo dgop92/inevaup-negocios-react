@@ -17,6 +17,7 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import useFetch from "use-http";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link as RouterLink } from "react-router-dom";
@@ -118,6 +119,7 @@ export default function DjangoPaginationTable({
   queryOptions,
   tableContainerStyles,
   tableStyles,
+  rowActions,
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -138,6 +140,11 @@ export default function DjangoPaginationTable({
     ...queryOptions,
   });
 
+  columnData.columns.forEach((col) => {
+    if (!col.displayFunction) {
+      col.displayFunction = (value) => value;
+    }
+  });
   /*
   if a brand or catalogue is not used in any product, it will rise a 400 error */
   const {
@@ -158,29 +165,24 @@ export default function DjangoPaginationTable({
             <TableRow key={row[columnData.fieldKey]}>
               {columnData.columns.map((colunm, index) => (
                 <TableCell key={index} {...colunm.cellProps}>
-                  {row[colunm.field]}
+                  {colunm.displayFunction(row[colunm.field])}
                 </TableCell>
               ))}
-              <TableCell align="right">
-                <Tooltip title="Editar">
-                  <IconButton
-                    component={RouterLink}
-                    to={`${pathName}/update/${row[columnData.fieldKey]}`}
-                    color="secondary"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Ver más">
-                  <IconButton
-                    component={RouterLink}
-                    to={`${pathName}/view/${row[columnData.fieldKey]}`}
-                    color="secondary"
-                  >
-                    <ArrowForwardIcon />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
+              {rowActions ? (
+                <OnClickRowActions
+                  rowActions={rowActions}
+                  pk={row[columnData.fieldKey]}
+                />
+              ) : (
+                <PathRowActions
+                  rowPath={{
+                    updatePath: `${pathName}/update/${
+                      row[columnData.fieldKey]
+                    }`,
+                    viewPath: `${pathName}/view/${row[columnData.fieldKey]}`,
+                  }}
+                />
+              )}
             </TableRow>
           ))}
 
@@ -218,6 +220,7 @@ DjangoPaginationTable.propTypes = {
   queryOptions: PropTypes.object,
   tableContainerStyles: PropTypes.object,
   tableStyles: PropTypes.object,
+  rowActions: PropTypes.object,
 };
 
 function TableHeader({ columns }) {
@@ -243,4 +246,58 @@ function fromObjectToQuery(enpoint, queryOptions) {
     }
   }
   return `${enpoint}/${myUrl.search}`;
+}
+
+//`${pathName}/update/${row[columnData.fieldKey]}`
+//`${pathName}/view/${row[columnData.fieldKey]}`
+function PathRowActions({ rowPath }) {
+  return (
+    <TableCell align="right">
+      <LinkIconButton toolTipTitle="Editar" to={rowPath.updatePath}>
+        <EditIcon />
+      </LinkIconButton>
+      <LinkIconButton toolTipTitle="Ver" to={rowPath.viewPath}>
+        <ArrowForwardIcon />
+      </LinkIconButton>
+    </TableCell>
+  );
+}
+
+function OnClickRowActions({ rowActions, pk }) {
+  return (
+    <TableCell align="right">
+      <ActionIconButton
+        toolTipTitle="Editar"
+        onClick={() => rowActions.onUpdate(pk)}
+      >
+        <EditIcon />
+      </ActionIconButton>
+      <ActionIconButton
+        toolTipTitle="Eliminar"
+        onClick={() => rowActions.onDelete(pk)}
+      >
+        <DeleteIcon />
+      </ActionIconButton>
+    </TableCell>
+  );
+}
+
+function LinkIconButton(props) {
+  return (
+    <Tooltip title={props.toolTipTitle}>
+      <IconButton component={RouterLink} to={props.to} color="secondary">
+        {props.children}
+      </IconButton>
+    </Tooltip>
+  );
+}
+
+function ActionIconButton(props) {
+  return (
+    <Tooltip title={props.toolTipTitle}>
+      <IconButton onClick={props.onClick} color="secondary">
+        {props.children}
+      </IconButton>
+    </Tooltip>
+  );
 }

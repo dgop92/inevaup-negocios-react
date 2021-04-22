@@ -39,6 +39,7 @@ export default function DeleteModal({
   itemPath,
   pkPath,
   protectedErrorMessage,
+  noredirect
 }) {
   const classes = useStyles();
 
@@ -46,7 +47,7 @@ export default function DeleteModal({
 
   const deleteItem = () => del();
 
-  if (response?.ok) return <Redirect to={itemPath} />;
+  if (!noredirect && response?.ok) return <Redirect to={itemPath} />;
 
   return (
     <Modal

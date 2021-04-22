@@ -28,7 +28,7 @@ export function useApiWithAuthToken() {
       },
       response: async ({ response }) => {
         const res = response;
-        if (!response.ok) {
+        if (isOverallError(res.status)) {
           setHttpStatus(res.status);
         }
         return res;
@@ -37,4 +37,8 @@ export function useApiWithAuthToken() {
   };
 
   return { authToken, setAuthToken, globalFetchOptions, httpStatus };
+}
+
+function isOverallError(statusCode){
+  return [500, 404, 403, 401].includes(statusCode)
 }

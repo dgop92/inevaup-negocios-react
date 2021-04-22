@@ -42,7 +42,7 @@ function MainContent() {
         setModal={setModal}
         itemPath={itemPath}
         pkPath={`/${id}`}
-        protectedErrorMessage="Este producto está siendo en otros registros"
+        protectedErrorMessage="Este producto está siendo usado en otros registros"
       ></DeleteModal>
       <Box mt={2} display="flex" justifyContent="center">
         <Paper style={{ width: "100%", maxWidth: 950, padding: "1.5rem" }}>
