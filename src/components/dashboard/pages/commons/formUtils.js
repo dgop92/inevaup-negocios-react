@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useForm } from "react-hook-form";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -9,35 +10,43 @@ import useFetch from "use-http";
 import TextField from "@material-ui/core/TextField";
 import { Controller } from "react-hook-form";
 import MenuItem from "@material-ui/core/MenuItem";
+import { Redirect, useParams } from "react-router";
 
-export default function SimpleForm({
-  headerTitle,
-  buttonTitle,
-  nonFieldErros,
-  handleSubmit,
-  loading,
-  children,
+export function FormContainer({
+  paperStyles,
+  useFormRequestArgs,
+  formTitles,
+  inputBody: InputBody,
 }) {
-  return (
-    <form onSubmit={handleSubmit}>
-      <FormContainer>
-        <FormHeader title={headerTitle}></FormHeader>
-        {children}
-        <NonFieldErrors errors={nonFieldErros}></NonFieldErrors>
-        <FormFooter title={buttonTitle} loading={loading} />
-      </FormContainer>
-    </form>
-  );
-}
-
-export function FormContainer({ paperStyles, children }) {
   const pStyles = {
     width: "100%",
-    maxWidth: 950,
     padding: "1.5rem",
     ...paperStyles,
   };
-  return <Paper style={pStyles}>{children}</Paper>;
+
+  const { id } = useParams();
+  if (useFormRequestArgs?.updateMode) useFormRequestArgs.updatePk = id;
+
+  const {
+    onSubmit,
+    loading,
+    nonFieldErros,
+    successPath,
+    ...inputProps
+  } = useFormRequest(useFormRequestArgs);
+  
+  if (successPath) return <Redirect to={successPath} />;
+
+  return (
+    <Box mt={2} onSubmit={onSubmit} component="form">
+      <Paper style={pStyles}>
+        <FormHeader title={formTitles.headerTitle}></FormHeader>
+        <InputBody {...inputProps} />
+        <NonFieldErrors errors={nonFieldErros}></NonFieldErrors>
+        <FormFooter title={formTitles.buttonTitle} loading={loading} />
+      </Paper>
+    </Box>
+  );
 }
 
 export function FormHeader({ title }) {
@@ -134,4 +143,88 @@ export function ForeginSelect({ selectOptions, control }) {
       ))}
     </Controller>
   );
+}
+
+export function useFormRequest({
+  itemPath = "",
+  updatePk = 0,
+  updateWithPatch = false,
+  onSuccess = () => {},
+} = {}) {
+  const [successPath, setSuccessPath] = useState("");
+
+  const endPoint = updatePk ? `${itemPath}${updatePk}` : itemPath;
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    errors,
+  } = useForm();
+  const {
+    get,
+    post,
+    put,
+    patch,
+    response,
+    loading,
+    data: resData,
+  } = useFetch();
+
+  const onSubmit = handleSubmit(async (data) => {
+    let responseData;
+    if (updatePk) {
+      responseData = updateWithPatch
+        ? await patch(endPoint, data)
+        : await put(endPoint, data);
+    } else {
+      responseData = await post(endPoint, data);
+    }
+    if (response.ok) {
+      onSuccess();
+      setSuccessPath(`${itemPath}view/${responseData["pk"]}`);
+    } else {
+      setResponseErrors(setError, responseData);
+    }
+  });
+
+  const loadDefaultData = useCallback(async () => {
+    const itemData = await get(endPoint);
+    if (response.ok) setDefaultValues(setValue, itemData);
+  }, [get, endPoint, response, setValue]);
+
+  const nonFieldErros = resData?.non_field_errors;
+
+  useEffect(() => {
+    if (updatePk) {
+      loadDefaultData();
+    }
+  }, [updatePk, loadDefaultData]);
+
+  return {
+    control,
+    register,
+    onSubmit,
+    errors,
+    loading,
+    nonFieldErros,
+    successPath,
+  };
+}
+
+export function setResponseErrors(setError, responseErrors) {
+  for (const key in responseErrors) {
+    setError(key, {
+      type: "response",
+      message: responseErrors[key].join(","),
+    });
+  }
+}
+
+export function setDefaultValues(setValue, defaultData) {
+  for (const key in defaultData) {
+    if (key !== "pk") setValue(key, defaultData[key]);
+  }
 }
