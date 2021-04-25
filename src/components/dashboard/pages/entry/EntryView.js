@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { FooterViewButton } from "../commons/SimpleViewCard";
 import DeleteModal from "../commons/DeleteModal";
 
-import DjangoPaginationTable from "../commons/DjangoPaginationTable";
+import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import {
   useQueryOptions,
   CardList,

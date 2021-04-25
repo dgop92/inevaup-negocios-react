@@ -9,7 +9,7 @@ import {
   SearchBar,
   OrderingBar,
 } from "../commons/headerInputs";
-import DjangoPaginationTable from "../commons/DjangoPaginationTable";
+import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import GenericItemView from "../commons/GenericItemView";
 import { getGenericPaths } from "../pathUtils";

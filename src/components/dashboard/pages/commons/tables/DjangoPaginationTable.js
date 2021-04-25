@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -17,10 +16,13 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import useFetch from "use-http";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import Tooltip from "@material-ui/core/Tooltip";
-import { Link as RouterLink } from "react-router-dom";
+import {
+  LinkIconButton,
+  OnClickRowActions,
+  TableHeader,
+  fromObjectToQuery,
+} from "./tableUtils";
 
 const usePagintationStyles = makeStyles((theme) => ({
   root: {
@@ -222,32 +224,6 @@ DjangoPaginationTable.propTypes = {
   tableStyles: PropTypes.object,
   rowActions: PropTypes.object,
 };
-
-function TableHeader({ columns }) {
-  return (
-    <TableHead>
-      <TableRow>
-        {columns.map((colunm, index) => (
-          <TableCell key={index} {...colunm.cellProps}>
-            {colunm.headerName}
-          </TableCell>
-        ))}
-        <TableCell align="right">Acciones</TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
-
-function fromObjectToQuery(enpoint, queryOptions) {
-  const myUrl = new URL("http://127.0.0.1:8000");
-  for (const property in queryOptions) {
-    if (queryOptions[property] && queryOptions[property] !== "all") {
-      myUrl.searchParams.append(property, queryOptions[property]);
-    }
-  }
-  return `${enpoint}/${myUrl.search}`;
-}
-
 //`${pathName}/update/${row[columnData.fieldKey]}`
 //`${pathName}/view/${row[columnData.fieldKey]}`
 function PathRowActions({ rowPath }) {
@@ -260,44 +236,5 @@ function PathRowActions({ rowPath }) {
         <ArrowForwardIcon />
       </LinkIconButton>
     </TableCell>
-  );
-}
-
-function OnClickRowActions({ rowActions, pk }) {
-  return (
-    <TableCell align="right">
-      <ActionIconButton
-        toolTipTitle="Editar"
-        onClick={() => rowActions.onUpdate(pk)}
-      >
-        <EditIcon />
-      </ActionIconButton>
-      <ActionIconButton
-        toolTipTitle="Eliminar"
-        onClick={() => rowActions.onDelete(pk)}
-      >
-        <DeleteIcon />
-      </ActionIconButton>
-    </TableCell>
-  );
-}
-
-function LinkIconButton(props) {
-  return (
-    <Tooltip title={props.toolTipTitle}>
-      <IconButton component={RouterLink} to={props.to} color="secondary">
-        {props.children}
-      </IconButton>
-    </Tooltip>
-  );
-}
-
-function ActionIconButton(props) {
-  return (
-    <Tooltip title={props.toolTipTitle}>
-      <IconButton onClick={props.onClick} color="secondary">
-        {props.children}
-      </IconButton>
-    </Tooltip>
   );
 }

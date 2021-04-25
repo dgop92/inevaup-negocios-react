@@ -13,7 +13,7 @@ import {
 import SimplePageHeader from "../commons/SimplePageHeader";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import { CardList, CardListHeader, ItemSearch } from "../commons/headerInputs";
-import PSTable from "../commons/PSTable";
+import PSTable from "../commons/tables/PSTable";
 import { FormModal } from "../commons/modals";
 import { useForm } from "react-hook-form";
 import useFetch from "use-http";

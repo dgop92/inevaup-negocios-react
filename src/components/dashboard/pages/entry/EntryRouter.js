@@ -5,7 +5,7 @@ import {
   CardListHeader,
   OrderingBar,
 } from "../commons/headerInputs";
-import DjangoPaginationTable from "../commons/DjangoPaginationTable";
+import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import { getGenericPaths } from "../pathUtils";
 import EntryView from "./EntryView"

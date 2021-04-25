@@ -1,5 +1,5 @@
 import React from "react";
-import DjangoPaginationTable from "../commons/DjangoPaginationTable";
+import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import SimplePageHeader from "../commons/SimplePageHeader";
 import AddIcon from "@material-ui/icons/Add";
 import {
