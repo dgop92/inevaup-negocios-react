@@ -3,16 +3,12 @@ import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import Box from "@material-ui/core/Box";
 import useFetch from "use-http";
-import { BaseModal } from "./modals";
+import { SearchItemModal } from "./modals";
 import { makeStyles } from "@material-ui/core/styles";
+import { ActionIconButton } from "./tables/tableUtils";
 
 const useCardListStyles = makeStyles((theme) => ({
   cardList: {
@@ -144,59 +140,6 @@ export function FilterBar({
   );
 }
 
-function SearchItemModal({
-  modalState,
-  setModalState,
-  placeholder,
-  itemSearchOptions,
-}) {
-  const { queryOptions, handleInputChange } = useQueryOptions({
-    search: "",
-    limit: "5",
-  });
-
-  const itemEndPoint = fromObjectToQuery(
-    itemSearchOptions.endpoint,
-    queryOptions
-  );
-
-  const { data: getData = { results: [] } } = useFetch(itemEndPoint, [
-    queryOptions,
-  ]);
-
-  const onItemSelected = (itemValue) => {
-    setModalState({ open: false, itemValue: itemValue });
-  };
-
-  return (
-    <BaseModal
-      open={modalState.open}
-      setModal={() => setModalState({ ...modalState, open: false })}
-      title={placeholder}
-    >
-      <Box display="flex" flexDirection="column" p={2}>
-        <SearchBar
-          handleInputChange={handleInputChange}
-          inputContainerStyles={{ maxWidth: 350 }}
-        />
-        {getData.results.map((item, index) => (
-          <List key={index} component="div">
-            <ListItem
-              button
-              onClick={() => onItemSelected(item[itemSearchOptions.mainField])}
-            >
-              <ListItemText
-                primary={item[itemSearchOptions.mainField]}
-                secondary={item[itemSearchOptions.secondaryField]}
-              />
-            </ListItem>
-          </List>
-        ))}
-      </Box>
-    </BaseModal>
-  );
-}
-
 export function ItemSearch({
   placeholder,
   itemSearchOptions,
@@ -257,16 +200,6 @@ export function ItemSearch({
   );
 }
 
-function ActionIconButton(props) {
-  return (
-    <Tooltip title={props.toolTipTitle}>
-      <IconButton onClick={props.onClick} color="secondary">
-        {props.children}
-      </IconButton>
-    </Tooltip>
-  );
-}
-
 function HeaderInputContainer(props) {
   const inputContainerStyles = {
     maxWidth: 300,
@@ -278,14 +211,4 @@ function HeaderInputContainer(props) {
       {props.children}
     </Box>
   );
-}
-
-function fromObjectToQuery(enpoint, queryOptions) {
-  const myUrl = new URL("http://127.0.0.1:8000");
-  for (const property in queryOptions) {
-    if (queryOptions[property] && queryOptions[property] !== "all") {
-      myUrl.searchParams.append(property, queryOptions[property]);
-    }
-  }
-  return `${enpoint}/${myUrl.search}`;
 }

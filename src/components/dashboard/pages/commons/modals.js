@@ -8,9 +8,14 @@ import { red } from "@material-ui/core/colors";
 import Divider from "@material-ui/core/Divider";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import useFetch from "use-http";
 import { FormFooter } from "./formUtils";
 import { useForm } from "react-hook-form";
+import { SearchBar, useQueryOptions } from "./headerInputs";
+import { fromObjectToQuery } from "./tables/tableUtils";
 
 const modalStyles = {
   top: "50%",
@@ -112,6 +117,59 @@ export function DeleteModal({ open, setModal, deletePath, onSuccessDelete}) {
         >
           Eliminar
         </DeleteButton>
+      </Box>
+    </BaseModal>
+  );
+}
+
+export function SearchItemModal({
+  modalState,
+  setModalState,
+  placeholder,
+  itemSearchOptions,
+}) {
+  const { queryOptions, handleInputChange } = useQueryOptions({
+    search: "",
+    limit: "5",
+  });
+
+  const itemEndPoint = fromObjectToQuery(
+    itemSearchOptions.endpoint,
+    queryOptions
+  );
+
+  const { data: getData = { results: [] } } = useFetch(itemEndPoint, [
+    queryOptions,
+  ]);
+
+  const onItemSelected = (itemValue) => {
+    setModalState({ open: false, itemValue: itemValue });
+  };
+
+  return (
+    <BaseModal
+      open={modalState.open}
+      setModal={() => setModalState({ ...modalState, open: false })}
+      title={placeholder}
+    >
+      <Box display="flex" flexDirection="column" p={2}>
+        <SearchBar
+          handleInputChange={handleInputChange}
+          inputContainerStyles={{ maxWidth: 350 }}
+        />
+        {getData.results.map((item, index) => (
+          <List key={index} component="div">
+            <ListItem
+              button
+              onClick={() => onItemSelected(item[itemSearchOptions.mainField])}
+            >
+              <ListItemText
+                primary={item[itemSearchOptions.mainField]}
+                secondary={item[itemSearchOptions.secondaryField]}
+              />
+            </ListItem>
+          </List>
+        ))}
       </Box>
     </BaseModal>
   );
