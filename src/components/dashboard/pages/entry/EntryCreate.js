@@ -12,8 +12,7 @@ import {
 } from "../commons/formUtils";
 import SimplePageHeader from "../commons/SimplePageHeader";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import CardList from "../commons/CardList";
-import { CardListHeader, ItemSearch } from "../commons/HeaderInputs";
+import { CardList, CardListHeader, ItemSearch } from "../commons/headerInputs";
 import PSTable from "../commons/PSTable";
 import { FormModal } from "../commons/modals";
 import { useForm } from "react-hook-form";

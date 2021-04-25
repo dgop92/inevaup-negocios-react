@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,9 +12,51 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Box from "@material-ui/core/Box";
 import useFetch from "use-http";
 import { BaseModal } from "./modals";
-import { useQueryOptions } from "./CardList";
+import { makeStyles } from "@material-ui/core/styles";
 
-//350, 300
+const useCardListStyles = makeStyles((theme) => ({
+  cardList: {
+    width: "100%",
+    borderRadius: theme.typography.fontSize,
+    marginTop: theme.spacing(2),
+  },
+}));
+
+export function CardList(props) {
+  const classes = useCardListStyles();
+
+  return <Paper className={classes.cardList}>{props.children}</Paper>;
+}
+
+export function CardListHeader(props) {
+  return (
+    <Box
+      p={3}
+      display="flex"
+      flexDirection="row"
+      flexWrap="wrap"
+      alignItems="center"
+      {...props}
+    >
+      {props.children}
+    </Box>
+  );
+}
+
+export function useQueryOptions(defaultQueryOptions) {
+  const [queryOptions, setQueryOptions] = useState(defaultQueryOptions);
+
+  const handleInputChange = (event) => {
+    const inputKey = event.target.name;
+    const inputValue = event.target.value;
+    const newPair = {};
+    newPair[inputKey] = inputValue;
+    setQueryOptions({ ...queryOptions, ...newPair });
+  };
+
+  return { queryOptions, setQueryOptions, handleInputChange };
+}
+
 export function SearchBar({ handleInputChange, inputContainerStyles }) {
   return (
     <HeaderInputContainer inputContainerStyles={inputContainerStyles}>
@@ -232,21 +275,6 @@ function HeaderInputContainer(props) {
   };
   return (
     <Box m={1} {...props.boxProps} style={inputContainerStyles}>
-      {props.children}
-    </Box>
-  );
-}
-
-export function CardListHeader(props) {
-  return (
-    <Box
-      p={3}
-      display="flex"
-      flexDirection="row"
-      flexWrap="wrap"
-      alignItems="center"
-      {...props}
-    >
       {props.children}
     </Box>
   );

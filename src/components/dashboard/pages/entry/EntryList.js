@@ -3,10 +3,11 @@ import DjangoPaginationTable from "../commons/DjangoPaginationTable";
 import SimplePageHeader from "../commons/SimplePageHeader";
 import AddIcon from "@material-ui/icons/Add";
 import {
+  useQueryOptions,
+  CardList,
   CardListHeader,
   OrderingBar,
-} from "../commons/HeaderInputs";
-import CardList, { useQueryOptions } from "../commons/CardList";
+} from "../commons/headerInputs";
 
 function fromUTCDateStringToDisplayDate(UTCdate){
     const localDate = new Date(UTCdate);

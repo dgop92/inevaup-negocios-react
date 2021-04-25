@@ -1,7 +1,7 @@
 import React from "react";
 import SimplePageHeader from "./SimplePageHeader";
 import AddIcon from "@material-ui/icons/Add";
-import CardList from "./CardList";
+import { CardList } from "./headerInputs";
 
 export default function GenericListView({pageHeaderTitle, children}) {
   return (

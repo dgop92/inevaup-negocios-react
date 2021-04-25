@@ -12,11 +12,12 @@ import DeleteModal from "../commons/DeleteModal";
 
 import DjangoPaginationTable from "../commons/DjangoPaginationTable";
 import {
+  useQueryOptions,
+  CardList,
   CardListHeader,
   OrderingBar,
   SearchBar,
-} from "../commons/HeaderInputs";
-import CardList, { useQueryOptions } from "../commons/CardList";
+} from "../commons/headerInputs";
 import UpdateModal from "../commons/UpdateModal";
 import { FormFooter } from "../commons/formUtils";
 import { useFormRequest } from "../commons/formUtils";

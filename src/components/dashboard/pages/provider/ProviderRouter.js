@@ -3,12 +3,12 @@ import { Route, Switch, useRouteMatch } from "react-router";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import GenericItemForm from "../commons/GenericItemForm";
-import { useQueryOptions } from "../commons/CardList";
 import {
+  useQueryOptions,
   CardListHeader,
   SearchBar,
   OrderingBar,
-} from "../commons/HeaderInputs";
+} from "../commons/headerInputs";
 import DjangoPaginationTable from "../commons/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import GenericItemView from "../commons/GenericItemView";

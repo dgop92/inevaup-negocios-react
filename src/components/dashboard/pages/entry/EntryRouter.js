@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router";
-import { useQueryOptions } from "../commons/CardList";
 import {
+  useQueryOptions,
   CardListHeader,
   OrderingBar,
-} from "../commons/HeaderInputs";
+} from "../commons/headerInputs";
 import DjangoPaginationTable from "../commons/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import { getGenericPaths } from "../pathUtils";
