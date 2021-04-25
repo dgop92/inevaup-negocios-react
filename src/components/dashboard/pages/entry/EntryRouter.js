@@ -9,6 +9,7 @@ import DjangoPaginationTable from "../commons/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import { getGenericPaths } from "../pathUtils";
 import EntryView from "./EntryView"
+import EntryCreate from "./EntryCreate"
 
 const genericPaths = getGenericPaths("entries");
 
@@ -47,7 +48,7 @@ const orderItems = [
 },
 ];
 
-export default function BrandRouter() {
+export default function ItemRouter() {
   let { path } = useRouteMatch();
   return (
     <Switch>
@@ -56,6 +57,7 @@ export default function BrandRouter() {
           <CardListContent />
         </GenericListView>
       </Route>
+      <Route path={`${path}/create`} component={EntryCreate} />
       <Route path={`${path}/view/:id`} component={EntryView} />
     </Switch>
   );

@@ -183,7 +183,7 @@ export function useFormRequest({
       responseData = await post(endPoint, data);
     }
     if (response.ok) {
-      onSuccess();
+      onSuccess(responseData);
       setSuccessPath(`${itemPath}view/${responseData["pk"]}`);
     } else {
       setResponseErrors(setError, responseData);

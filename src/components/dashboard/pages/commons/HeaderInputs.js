@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import Box from "@material-ui/core/Box";
 import useFetch from "use-http";
+import { BaseModal } from "./modals";
+import { useQueryOptions } from "./CardList";
 
 //350, 300
 export function SearchBar({ handleInputChange, inputContainerStyles }) {
@@ -63,7 +70,6 @@ export function FilterBar({
   handleInputChange,
   inputContainerStyles,
 }) {
-
   const { data: getData = { results: [] } } = useFetch(
     filterOptions.endPoint,
     []
@@ -95,6 +101,129 @@ export function FilterBar({
   );
 }
 
+function SearchItemModal({
+  modalState,
+  setModalState,
+  placeholder,
+  itemSearchOptions,
+}) {
+  const { queryOptions, handleInputChange } = useQueryOptions({
+    search: "",
+    limit: "5",
+  });
+
+  const itemEndPoint = fromObjectToQuery(
+    itemSearchOptions.endpoint,
+    queryOptions
+  );
+
+  const { data: getData = { results: [] } } = useFetch(itemEndPoint, [
+    queryOptions,
+  ]);
+
+  const onItemSelected = (itemValue) => {
+    setModalState({ open: false, itemValue: itemValue });
+  };
+
+  return (
+    <BaseModal
+      open={modalState.open}
+      setModal={() => setModalState({ ...modalState, open: false })}
+      title={placeholder}
+    >
+      <Box display="flex" flexDirection="column" p={2}>
+        <SearchBar
+          handleInputChange={handleInputChange}
+          inputContainerStyles={{ maxWidth: 350 }}
+        />
+        {getData.results.map((item, index) => (
+          <List key={index} component="div">
+            <ListItem
+              button
+              onClick={() => onItemSelected(item[itemSearchOptions.mainField])}
+            >
+              <ListItemText
+                primary={item[itemSearchOptions.mainField]}
+                secondary={item[itemSearchOptions.secondaryField]}
+              />
+            </ListItem>
+          </List>
+        ))}
+      </Box>
+    </BaseModal>
+  );
+}
+
+export function ItemSearch({
+  placeholder,
+  itemSearchOptions,
+  inputContainerStyles,
+  register,
+  errors,
+}) {
+  const boxProps = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  };
+
+  const [modalState, setModalState] = useState({ open: false, itemValue: "" });
+
+  return (
+    <React.Fragment>
+      {modalState.open && (
+        <SearchItemModal
+          modalState={modalState}
+          setModalState={setModalState}
+          placeholder={placeholder}
+          itemSearchOptions={itemSearchOptions}
+        />
+      )}
+      <HeaderInputContainer
+        boxProps={boxProps}
+        inputContainerStyles={inputContainerStyles}
+      >
+        <ActionIconButton
+          toolTipTitle="Buscar"
+          onClick={() =>
+            setModalState({ ...modalState, open: true })
+          }
+        >
+          <SearchIcon />
+        </ActionIconButton>
+        <TextField
+          name={itemSearchOptions.inputName}
+          placeholder={placeholder}
+          variant="outlined"
+          fullWidth
+          size="small"
+          inputProps={{readOnly: true}}
+          inputRef={register({
+            required: "Este campo es requerido",
+            maxLength: {
+              value: 70,
+              message: "Demasiados caracteres",
+            },
+          })}
+          value={modalState.itemValue}
+          error={errors[itemSearchOptions.inputName] ? true : false}
+          helperText={errors[itemSearchOptions.inputName]?.message}
+        />
+      </HeaderInputContainer>
+    </React.Fragment>
+  );
+}
+
+function ActionIconButton(props) {
+  return (
+    <Tooltip title={props.toolTipTitle}>
+      <IconButton onClick={props.onClick} color="secondary">
+        {props.children}
+      </IconButton>
+    </Tooltip>
+  );
+}
+
 function HeaderInputContainer(props) {
   const inputContainerStyles = {
     maxWidth: 300,
@@ -102,7 +231,7 @@ function HeaderInputContainer(props) {
     ...props.inputContainerStyles,
   };
   return (
-    <Box m={1} style={inputContainerStyles}>
+    <Box m={1} {...props.boxProps} style={inputContainerStyles}>
       {props.children}
     </Box>
   );
@@ -116,8 +245,19 @@ export function CardListHeader(props) {
       flexDirection="row"
       flexWrap="wrap"
       alignItems="center"
+      {...props}
     >
       {props.children}
     </Box>
   );
+}
+
+function fromObjectToQuery(enpoint, queryOptions) {
+  const myUrl = new URL("http://127.0.0.1:8000");
+  for (const property in queryOptions) {
+    if (queryOptions[property] && queryOptions[property] !== "all") {
+      myUrl.searchParams.append(property, queryOptions[property]);
+    }
+  }
+  return `${enpoint}/${myUrl.search}`;
 }
