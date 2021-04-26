@@ -256,7 +256,7 @@ function PurchaseCardList() {
               helperText={errors?.amount?.message}
             />
             <FormFooter
-              boxProps={{ mt: 2 }}
+              mt={2}
               title="Actualizar"
               loading={loading}
             />

@@ -198,7 +198,7 @@ export function FormModal({
     <BaseModal title={title} open={modalState.open} setModal={setModal}>
       <Box p={2} component="form" onSubmit={handleSubmit(onSubmit)}>
         <InputBody {...formRest} />
-        <FormFooter boxProps={{ mt: 2 }} title={buttonTitle} />
+        <FormFooter mt={2} title={buttonTitle} />
       </Box>
     </BaseModal>
   );

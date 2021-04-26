@@ -37,7 +37,7 @@ export default function PSTable({
                   {colunm.displayFunction(row[colunm.field])}
                 </TableCell>
               ))}
-              <OnClickRowActions rowActions={rowActions} index={index} />
+              <OnClickRowActions rowActions={rowActions} pk={index} />
             </TableRow>
           ))}
 

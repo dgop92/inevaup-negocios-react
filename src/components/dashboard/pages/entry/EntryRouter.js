@@ -7,11 +7,11 @@ import {
 } from "../commons/headerInputs";
 import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
-import { getGenericPaths } from "../pathUtils";
+import { getEEPaths } from "../pathUtils";
 import EntryView from "./EntryView"
-import EntryCreate from "./EntryCreate"
+import EntryForm from "./EntryForm"
 
-const genericPaths = getGenericPaths("entries");
+const eePaths = getEEPaths("entries", "purchases");
 
 function fromUTCDateStringToDisplayDate(UTCdate){
   const localDate = new Date(UTCdate);
@@ -57,7 +57,9 @@ export default function ItemRouter() {
           <CardListContent />
         </GenericListView>
       </Route>
-      <Route path={`${path}/create`} component={EntryCreate} />
+      <Route path={`${path}/create`} >
+        <EntryForm endPointPaths={eePaths} />
+      </Route>
       <Route path={`${path}/view/:id`} component={EntryView} />
     </Switch>
   );
@@ -79,7 +81,7 @@ function CardListContent() {
         />
       </CardListHeader>
       <DjangoPaginationTable
-        endPoint={genericPaths.itemPath}
+        endPoint={eePaths.itemPath}
         columnData={colunmData}
         tableStyles={{ minWidth: 850 }}
         queryOptions={queryOptions}

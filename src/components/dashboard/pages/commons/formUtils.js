@@ -34,7 +34,7 @@ export function FormContainer({
     successPath,
     ...inputProps
   } = useFormRequest(useFormRequestArgs);
-  
+
   if (successPath) return <Redirect to={successPath} />;
 
   return (
@@ -83,21 +83,20 @@ export function NonFieldErrors({ errors, typographyProps }) {
   );
 }
 
-export function FormFooter({ title, loading, boxProps }) {
-  const bProps = {
-    display: "flex",
-    justifyContent: "flex-end",
-    ...boxProps,
-  };
-
+export function FormFooter({ title, loading, buttonProps, ...boxProps }) {
   return (
-    <Box {...bProps}>
+    <Box display="flex" justifyContent="flex-end" {...boxProps}>
       {loading && (
         <LinearProgress
           style={{ flexGrow: 1, alignSelf: "center", margin: "0 2rem" }}
         />
       )}
-      <Button type="submit" variant="contained" color="primary">
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        {...buttonProps}
+      >
         {title}
       </Button>
     </Box>
