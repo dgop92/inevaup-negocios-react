@@ -73,7 +73,7 @@ export function ModalHeader({ title, setModal }) {
   );
 }
 
-export function DeleteModal({ open, setModal, deletePath, onSuccessDelete}) {
+export function DeleteModal({ open, setModal, deletePath, onSuccessDelete }) {
   const classes = useStyles();
   const { del, response, data } = useFetch(deletePath);
 
@@ -152,10 +152,16 @@ export function SearchItemModal({
       setModal={() => setModalState({ ...modalState, open: false })}
       title={placeholder}
     >
-      <Box display="flex" flexDirection="column" p={2}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        p={2}
+        maxHeight={650}
+        style={{overflowY: "scroll"}}
+      >
         <SearchBar
           handleInputChange={handleInputChange}
-          inputContainerStyles={{ maxWidth: 350 }}
+          inputContainerStyles={{ maxWidth: null, width: null }}
         />
         {getData.results.map((item, index) => (
           <List key={index} component="div">
@@ -165,7 +171,18 @@ export function SearchItemModal({
             >
               <ListItemText
                 primary={item[itemSearchOptions.mainField]}
-                secondary={item[itemSearchOptions.secondaryField]}
+                secondary={
+                  <React.Fragment>
+                    {itemSearchOptions?.secondaryFields?.map((secondaryField, index) => (
+                      <React.Fragment key={index}>
+                        {`${secondaryField.displayName} : ${
+                          item[secondaryField.fieldName]
+                        }`}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </React.Fragment>
+                }
               />
             </ListItem>
           </List>

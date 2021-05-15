@@ -29,10 +29,17 @@ const errorRoutes = [
     },
   },
   {
-    path: "//403",
+    path: "/403",
     compProps: {
       title: "403",
       subTitle: "Sin permiso para acceder a esta página",
+    },
+  },
+  {
+    path: "/401",
+    compProps: {
+      title: "401",
+      subTitle: "Sin autorización",
     },
   },
 ];

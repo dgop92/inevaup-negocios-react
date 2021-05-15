@@ -144,6 +144,7 @@ export function ItemSearch({
   placeholder,
   itemSearchOptions,
   inputContainerStyles,
+  registerOptions,
   register,
   errors,
 }) {
@@ -152,6 +153,15 @@ export function ItemSearch({
     flexDirection: "row",
     alignItems: "center",
   };
+
+  const defaultRegOptions = {
+    required: "Este campo es requerido",
+    maxLength: {
+      value: 70,
+      message: "Demasiados caracteres",
+    },
+  }
+  const regOptions = registerOptions || defaultRegOptions;
 
   const [modalState, setModalState] = useState({ open: false, itemValue: "" });
 
@@ -169,28 +179,29 @@ export function ItemSearch({
         boxProps={boxProps}
         inputContainerStyles={inputContainerStyles}
       >
-        <ActionIconButton
-          toolTipTitle="Buscar"
-          onClick={() =>
-            setModalState({ ...modalState, open: true })
-          }
-        >
-          <SearchIcon />
-        </ActionIconButton>
         <TextField
           name={itemSearchOptions.inputName}
           placeholder={placeholder}
           variant="outlined"
           fullWidth
           size="small"
-          inputProps={{readOnly: true}}
-          inputRef={register({
-            required: "Este campo es requerido",
-            maxLength: {
-              value: 70,
-              message: "Demasiados caracteres",
-            },
-          })}
+          inputProps={{
+            readOnly: true,
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <ActionIconButton
+                  toolTipTitle="Buscar"
+                  iconButtonProps={{ style: { padding: 0 } }}
+                  onClick={() => setModalState({ ...modalState, open: true })}
+                >
+                  <SearchIcon />
+                </ActionIconButton>
+              </InputAdornment>
+            )
+          }}
+          inputRef={register(regOptions)}
           value={modalState.itemValue}
           error={errors[itemSearchOptions.inputName] ? true : false}
           helperText={errors[itemSearchOptions.inputName]?.message}

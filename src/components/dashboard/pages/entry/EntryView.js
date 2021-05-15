@@ -53,20 +53,6 @@ const orderItems = [
   },
 ];
 
-// use cache? you could create a function to compute this in the server
-function getComputedData(entry_purchases) {
-  let totalUnits = 0,
-    totalSpent = 0;
-  if (!entry_purchases) return { totalUnits, totalSpent };
-
-  entry_purchases.forEach((purchase) => {
-    totalUnits += purchase.amount;
-    totalSpent += purchase.amount * purchase.product_purchase_price;
-  });
-
-  return { totalUnits, totalSpent };
-}
-
 export default function EntryView() {
   return (
     <React.Fragment>
@@ -92,10 +78,6 @@ function MainContent() {
 
   const [modal, setModal] = useState(false);
 
-  const { totalUnits, totalSpent } = getComputedData(
-    entryData?.entry_purchases
-  );
-  
   const onSuccessDelete = () => <Redirect to={itemPath} />;
 
   return (
@@ -163,10 +145,10 @@ function MainContent() {
                   Informacion sobre compras
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {`Unidades compradas: ${totalUnits || "Unidades"}`}
+                  {`Unidades compradas: ${entryData.units_bought || "Unidades"}`}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {`Total gastado: ${totalSpent || "Total"}`}
+                  {`Total gastado: ${entryData.spent || "Total"}`}
                 </Typography>
               </Box>
             </Box>

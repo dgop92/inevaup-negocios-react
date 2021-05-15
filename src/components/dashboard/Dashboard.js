@@ -10,6 +10,7 @@ import CatalogueRouter from "./pages/catalogue/CatalogueRouter";
 import ProductRouter from "./pages/product/ProductRouter";
 import ProviderRouter from "./pages/provider/ProviderRouter";
 import EntryRouter from "./pages/entry/EntryRouter";
+import ExitRouter from "./pages/exits/ExitRouter";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,6 +83,7 @@ function DashboardContent() {
       <Route path={`${path}/products`} children={<ProductRouter />} />
       <Route path={`${path}/providers`} children={<ProviderRouter />} />
       <Route path={`${path}/entries`} children={<EntryRouter />} />
+      <Route path={`${path}/exits`} children={<ExitRouter />} />
       <Route path="*" children={<Redirect to={path} />} />
     </Switch>
   );

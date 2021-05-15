@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { CardList, CardListHeader, ItemSearch } from "../headerInputs";
 import PSTable from "../tables/PSTable";
 import { useForm } from "react-hook-form";
 import { FormModal } from "../modals";
+import PSInputBody, {
+  AmountInputBody,
+  UnitPriceInputBody,
+} from "./PSInputBody";
 
 const columns = [
   {
@@ -16,13 +19,22 @@ const columns = [
     field: "amount",
     headerName: "Cantidad",
   },
+  {
+    field: "unit_price",
+    headerName: "Precio Unitario",
+  },
 ];
 
 const itemSearchOptions = {
   inputName: "product",
   endpoint: "/dashboard/products",
   mainField: "code",
-  secondaryField: "name",
+  secondaryFields: [
+    { displayName: "Nombre", fieldName: "name" },
+    { displayName: "Precio venta", fieldName: "sale_price" },
+    { displayName: "Precio compra", fieldName: "purchase_price" },
+    { displayName: "Stock", fieldName: "stock" },
+  ],
 };
 
 export default function PEItemsSelectorCard({
@@ -48,6 +60,7 @@ export default function PEItemsSelectorCard({
           defaultValues: {
             childIndex: index,
             amount: childItems[index].amount,
+            unit_price: childItems[index].unit_price,
           },
         },
       });
@@ -61,7 +74,10 @@ export default function PEItemsSelectorCard({
     const updateIndex = updateModalState.formArgs.defaultValues.childIndex;
     setChildItems(
       childItems.map((childItem, index) => {
-        if (index === updateIndex) childItem.amount = data.amount;
+        if (index === updateIndex) {
+          childItem.amount = data.amount;
+          childItem.unit_price = data.unit_price;
+        }
         return childItem;
       })
     );
@@ -74,7 +90,7 @@ export default function PEItemsSelectorCard({
           title={updateAmountTitle}
           buttonTitle="Actualizar"
           onSubmit={onUpdateItem}
-          inputBody={AmountInputBody}
+          inputBody={PSInputBody}
           modalState={updateModalState}
           setModal={(open) =>
             setUpdateModalState({
@@ -95,7 +111,7 @@ export default function PEItemsSelectorCard({
             register={register}
             errors={errors}
             itemSearchOptions={itemSearchOptions}
-            inputContainerStyles={{ maxWidth: 600 }}
+            inputContainerStyles={{ maxWidth: 450 }}
           />
           <Box
             m={1}
@@ -105,6 +121,15 @@ export default function PEItemsSelectorCard({
             alignItems="center"
           >
             <AmountInputBody register={register} errors={errors} />
+          </Box>
+          <Box
+            m={1}
+            width="100%"
+            maxWidth={300}
+            display="flex"
+            alignItems="center"
+          >
+            <UnitPriceInputBody register={register} errors={errors} />
           </Box>
           <Box
             m={1}
@@ -126,31 +151,5 @@ export default function PEItemsSelectorCard({
         />
       </CardList>
     </React.Fragment>
-  );
-}
-
-function AmountInputBody({ register, errors }) {
-  return (
-    <TextField
-      name="amount"
-      label="Cantidad"
-      size="small"
-      fullWidth
-      variant="outlined"
-      type="number"
-      inputRef={register({
-        required: "Este campo es requerido",
-        maxLength: {
-          value: 70,
-          message: "Demasiados caracteres",
-        },
-        min: {
-          value: 1,
-          message: "La cantidad debe ser positiva",
-        },
-      })}
-      error={errors.amount ? true : false}
-      helperText={errors?.amount?.message}
-    />
   );
 }

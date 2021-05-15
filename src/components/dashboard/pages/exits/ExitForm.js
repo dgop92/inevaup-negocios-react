@@ -5,41 +5,45 @@ import SimplePageHeader from "../commons/SimplePageHeader";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import useFetch from "use-http";
 import PSItemsSelectorCard from "../commons/entrypurchases/PSItemsSelectorCard";
-import GeneralFormContainer from "../commons/entrypurchases/GeneralFormContainer";
 import { useForm } from "react-hook-form";
+import GeneralFormContainer from "../commons/entrypurchases/GeneralFormContainer";
 
-export default function EntryForm({ endPointPaths, inputBody: InputBody }) {
+export default function ExitForm({ endPointPaths, inputBody: InputBody }) {
   return (
     <React.Fragment>
       <SimplePageHeader
-        title="Crear Entrada"
+        title="Crear Salida"
         buttonProps={{
           title: "Regresar",
           startIcon: <ArrowBack />,
           to: endPointPaths.itemPath,
         }}
       />
-      <EntryFormContainer endPointPaths={endPointPaths} inputBody={InputBody} />
+      <ExitFormContainer endPointPaths={endPointPaths} inputBody={InputBody} />
     </React.Fragment>
   );
 }
 
-function EntryFormContainer({ endPointPaths, inputBody: InputBody }) {
+function ExitFormContainer({ endPointPaths, inputBody: InputBody }) {
   const [childItems, setChildItems] = useState([]);
   const { response, post, loading } = useFetch();
   const { handleSubmit, register, errors } = useForm();
 
-  const onSuccess = (responseData) => {
-    const responsePk = responseData.pk;
-    childItems.map(async (childItem) => {
-      await post(endPointPaths.childPaths.getPostEndPoint, {
-        ...childItem,
-        entry: responsePk,
+  const onSuccess = async (responseData) => {
+    if (response.ok) {
+      const responsePk = responseData.pk;
+      childItems.map(async (childItem) => {
+        const res = await post(endPointPaths.childPaths.getPostEndPoint, {
+          ...childItem,
+          exit: responsePk,
+        });
+        if (!res.ok){
+          console.log("SNAKBAR")
+        }
       });
-    });
+    }
   };
 
-  //it is imposible to have a bad request error in client
   const onSubmitParent = async (data) => {
     const responseData = await post(
       endPointPaths.parentPaths.getPostEndPoint,
@@ -58,10 +62,10 @@ function EntryFormContainer({ endPointPaths, inputBody: InputBody }) {
       <PSItemsSelectorCard
         childItems={childItems}
         setChildItems={setChildItems}
-        updateAmountTitle="Actualizar Compra"
+        updateAmountTitle="Actualizar venta"
       />
       <FormFooter
-        title="Crear Entrada"
+        title="Crear Salida"
         loading={loading}
         elevation={2}
         buttonProps={{

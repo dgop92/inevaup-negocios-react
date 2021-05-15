@@ -9,14 +9,15 @@ import {
 import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import { getEEPaths } from "../pathUtils";
-import EntryForm from "./EntryForm"
+import ExitForm from "./ExitForm";
+import GenericEEView from "../commons/entrypurchases/GenericEEView";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GenericItemForm from "../commons/GenericItemForm";
-import GenericEEView from "../commons/entrypurchases/GenericEEView";
 
-const eePaths = getEEPaths("entries", "purchases", "entry");
+
+const eePaths = getEEPaths("exits", "sales", "exit");
 
 function fromUTCDateStringToDisplayDate(UTCdate) {
   const localDate = new Date(UTCdate);
@@ -27,10 +28,6 @@ const colunmData = {
   fieldKey: "pk",
   columns: [
     {
-      field: "provider",
-      headerName: "Proveedor",
-    },
-    {
       field: "user",
       headerName: "Usuario",
     },
@@ -40,8 +37,8 @@ const colunmData = {
       displayFunction: fromUTCDateStringToDisplayDate,
     },
     {
-      field: "units_bought",
-      headerName: "Und. Compradas",
+      field: "units_sold",
+      headerName: "Und. Vendidas",
     },
   ],
 };
@@ -62,25 +59,25 @@ export default function ItemRouter() {
   return (
     <Switch>
       <Route exact path={path}>
-        <GenericListView pageHeaderTitle="Lista de entradas">
+        <GenericListView pageHeaderTitle="Lista de salidas">
           <CardListContent />
         </GenericListView>
       </Route>
       <Route path={`${path}/create`}>
-        <EntryForm endPointPaths={eePaths} inputBody={EntryInputBody} />
+        <ExitForm endPointPaths={eePaths} inputBody={ExitInputBody}/>
       </Route>
       <Route path={`${path}/view/:id`}>
         <GenericEEView
           customGeneralView={CustomGeneralView}
-          pageHeaderTitle="Ver entrada"
+          pageHeaderTitle="Ver salida"
           endPointPaths={eePaths}
         />
       </Route>
       <Route path={`${path}/update/:id`}>
         <GenericItemForm
-          pageHeaderTitle="Actualizar Entrada"
+          pageHeaderTitle="Actualizar Salida"
           backPath={eePaths.itemPath}
-          inputBody={EntryInputBody}
+          inputBody={ExitInputBody}
           formTitles={{
             headerTitle: "Actualizar información general",
             buttonTitle: "Actualizar",
@@ -120,33 +117,13 @@ function CardListContent() {
   );
 }
 
-const itemSearchOptions = {
-  inputName: "provider",
-  endpoint: "/dashboard/providers",
-  mainField: "name",
-};
-
-function EntryInputBody({ register, errors }) {
-  return (
-    <Box my={2}>
-      <ItemSearch
-        placeholder="Buscar proveedor"
-        register={register}
-        errors={errors}
-        itemSearchOptions={itemSearchOptions}
-        inputContainerStyles={{ maxWidth: null, width: null }}
-      />
-    </Box>
-  );
-}
-
 function CustomGeneralView({ data }) {
   return (
     <React.Fragment>
       {/* Header */}
       <Box mb={2}>
         <Typography variant="h6" style={{ marginBottom: 5 }}>
-          {`Entrada Numero ${data?.pk}`}
+          {`Salida Numero ${data?.pk}`}
         </Typography>
         <Divider />
       </Box>
@@ -168,7 +145,7 @@ function CustomGeneralView({ data }) {
               General
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              {`Proveedor: ${data.provider || "Proveedor"}`}
+              {`Cliente: ${data.client || "Sin cliente"}`}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               {`Usuario Encargado: ${data.user || "Usuario"}`}
@@ -194,14 +171,40 @@ function CustomGeneralView({ data }) {
               Informacion sobre compras
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              {`Unidades compradas: ${data.units_bought || "Unidades"}`}
+              {`Unidades vendidas: ${data.units_sold || "Unidades"}`}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              {`Total gastado: ${data.total_spent || "Total"}`}
+              {`Total vendido: ${data.total_sold || "Total"}`}
             </Typography>
           </Box>
         </Box>
       </Box>
     </React.Fragment>
+  );
+}
+
+const itemSearchOptions = {
+  inputName: "clients",
+  endpoint: "/dashboard/clients",
+  mainField: "name",
+};
+
+function ExitInputBody({ register, errors }) {
+  return (
+    <Box my={2}>
+      <ItemSearch
+        placeholder="Buscar cliente"
+        register={register}
+        errors={errors}
+        itemSearchOptions={itemSearchOptions}
+        inputContainerStyles={{ maxWidth: null, width: null }}
+        registerOptions={{
+          maxLength: {
+            value: 70,
+            message: "Demasiados caracteres",
+          },
+        }}
+      />
+    </Box>
   );
 }

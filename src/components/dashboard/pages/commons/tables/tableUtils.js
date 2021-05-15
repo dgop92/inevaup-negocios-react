@@ -40,7 +40,11 @@ export function LinkIconButton(props) {
 export function ActionIconButton(props) {
   return (
     <Tooltip title={props.toolTipTitle}>
-      <IconButton onClick={props.onClick} color="secondary">
+      <IconButton
+        {...props.iconButtonProps}
+        onClick={props.onClick}
+        color="secondary"
+      >
         {props.children}
       </IconButton>
     </Tooltip>

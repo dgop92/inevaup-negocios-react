@@ -7,8 +7,9 @@ export function getGenericPaths(itemName) {
   };
 }
 
-export function getEEPaths(itemName, childItemName) {
+export function getEEPaths(itemName, childItemName, parentName) {
   return {
+    parentName: parentName,
     itemPath: `/dashboard/${itemName}`,
     parentPaths: {
       updatePath: (pk) => `/dashboard/${itemName}/update/${pk}`,
@@ -16,6 +17,7 @@ export function getEEPaths(itemName, childItemName) {
       getDetailEndPoint: (pk) => `/dashboard/${itemName}/${pk}`,
     },
     childPaths: {
+      itemPath: `/dashboard/${childItemName}`,
       updatePath: (pk) => `/dashboard/${childItemName}/update/${pk}`,
       getPostEndPoint: `/dashboard/${childItemName}/`,
       getDetailEndPoint: (pk) => `/dashboard/${childItemName}/${pk}`,
