@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../SimplePageHeader";
-import { Redirect, useParams } from "react-router";
+import { useParams } from "react-router";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import useFetch from "use-http";
 import { FooterViewButton } from "../SimpleViewCard";
-import DeleteModal from "../DeleteModal";
 import DjangoPaginationTable from "../tables/DjangoPaginationTable";
 import {
   useQueryOptions,
@@ -19,6 +18,9 @@ import UpdateModal from "../UpdateModal";
 import { FormFooter } from "../formUtils";
 import { useFormRequest } from "../formUtils";
 import PSInputBody from "./PSInputBody";
+import { useSnackbar } from "notistack";
+import { DeleteModal } from "../modals";
+
 
 const colunmData = {
   fieldKey: "pk",
@@ -83,8 +85,6 @@ function ViewContainer({
 
   const [modal, setModal] = useState(false);
 
-  const onSuccessDelete = () => <Redirect to={endPointPaths.itemPath} />;
-
   return (
     <React.Fragment>
       {modal && (
@@ -92,8 +92,8 @@ function ViewContainer({
           open={modal}
           setModal={setModal}
           deletePath={detailPath}
+          redirectPath={endPointPaths.itemPath}
           protectedErrorMessage="Elimina todas las compras realizadas con este item"
-          onSuccessDelete={onSuccessDelete}
         ></DeleteModal>
       )}
       <Box mt={2} display="flex" justifyContent="center">
@@ -103,7 +103,7 @@ function ViewContainer({
           <Box display="flex" justifyContent="flex-end">
             <FooterViewButton
               onDelete={() => setModal(true)}
-              updatePath={detailPath}
+              updatePath={endPointPaths.parentPaths.updatePath(id)}
             />
           </Box>
         </Paper>
@@ -115,6 +115,7 @@ function ViewContainer({
 
 function EECardList({ endPointPaths }) {
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { queryOptions, handleInputChange } = useQueryOptions({
     search: "",
@@ -122,11 +123,17 @@ function EECardList({ endPointPaths }) {
     [endPointPaths.parentName]: id,
   });
 
+
   const [updateModal, setUpdateModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [updatePk, setUpdatePk] = useState(0);
 
-  const onSuccess = () => console.log("YES SNAKBAR");
+  const onSuccess = () => {    
+    setUpdateModal(false);
+    enqueueSnackbar("Item actualizado exitosamente", { 
+      variant: 'success',
+    })
+  };
   const postPath = endPointPaths.childPaths.getPostEndPoint;
   const itemPath = endPointPaths.childPaths.itemPath;
 
@@ -148,6 +155,13 @@ function EECardList({ endPointPaths }) {
     },
   };
 
+  const onSuccessDelete = () => {
+    enqueueSnackbar("Item eliminado exitosamente", { 
+      variant: 'success',
+      preventDuplicate: true,
+    })
+  };
+
   return (
     <React.Fragment>
       {deleteModal && (
@@ -155,8 +169,7 @@ function EECardList({ endPointPaths }) {
           open={deleteModal}
           setModal={setDeleteModal}
           deletePath={endPointPaths.childPaths.getDetailEndPoint(updatePk)}
-          noredirect={true}
-          onSuccessDelete={() => console.log("SNACK BAR")}
+          onSuccessDelete={onSuccessDelete}
         ></DeleteModal>
       )}
       {updateModal && (

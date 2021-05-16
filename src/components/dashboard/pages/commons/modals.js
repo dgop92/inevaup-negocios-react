@@ -16,6 +16,7 @@ import { FormFooter } from "./formUtils";
 import { useForm } from "react-hook-form";
 import { SearchBar, useQueryOptions } from "./headerInputs";
 import { fromObjectToQuery } from "./tables/tableUtils";
+import { useHistory } from "react-router";
 
 const modalStyles = {
   top: "50%",
@@ -73,18 +74,30 @@ export function ModalHeader({ title, setModal }) {
   );
 }
 
-export function DeleteModal({ open, setModal, deletePath, onSuccessDelete }) {
+export function DeleteModal({
+  open,
+  setModal,
+  deletePath,
+  onSuccessDelete,
+  redirectPath,
+}) {
   const classes = useStyles();
   const { del, response, data } = useFetch(deletePath);
+  const history = useHistory();
 
-  const deleteItem = () => del();
+  const deleteItem = async () => {
+    await del();
+    if (response?.ok) {
 
-  if (response?.ok) {
-    const newComponent = onSuccessDelete();
-    if (newComponent) {
-      return newComponent;
+      if (redirectPath) {
+        history.replace(redirectPath);
+      } else {
+        setModal(false);
+        onSuccessDelete();
+      }
     }
   }
+
   return (
     <BaseModal title="Avertencia" open={open} setModal={setModal}>
       <Box p={2}>
@@ -157,7 +170,7 @@ export function SearchItemModal({
         flexDirection="column"
         p={2}
         maxHeight={650}
-        style={{overflowY: "scroll"}}
+        style={{ overflowY: "scroll" }}
       >
         <SearchBar
           handleInputChange={handleInputChange}
@@ -173,14 +186,16 @@ export function SearchItemModal({
                 primary={item[itemSearchOptions.mainField]}
                 secondary={
                   <React.Fragment>
-                    {itemSearchOptions?.secondaryFields?.map((secondaryField, index) => (
-                      <React.Fragment key={index}>
-                        {`${secondaryField.displayName} : ${
-                          item[secondaryField.fieldName]
-                        }`}
-                        <br />
-                      </React.Fragment>
-                    ))}
+                    {itemSearchOptions?.secondaryFields?.map(
+                      (secondaryField, index) => (
+                        <React.Fragment key={index}>
+                          {`${secondaryField.displayName} : ${
+                            item[secondaryField.fieldName]
+                          }`}
+                          <br />
+                        </React.Fragment>
+                      )
+                    )}
                   </React.Fragment>
                 }
               />
@@ -207,7 +222,7 @@ export function FormModal({
   onSubmit,
   inputBody: InputBody,
   modalState,
-  setModal
+  setModal,
 }) {
   const { handleSubmit, ...formRest } = useForm(modalState.formArgs);
 

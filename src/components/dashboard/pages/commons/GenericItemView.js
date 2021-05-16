@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../commons/SimplePageHeader";
-import { Redirect, useParams } from "react-router";
+import { useParams } from "react-router";
 import Box from "@material-ui/core/Box";
 import SimpleViewTable from "../commons/SimpleViewTable";
 import useFetch from "use-http";
 import SimpleViewCard from "../commons/SimpleViewCard";
-import DeleteModal from "../commons/DeleteModal";
 import PropTypes from "prop-types";
+import { DeleteModal } from "./modals";
 
 export default function GenericItemView({
   pageHeaderTitle,
@@ -42,7 +42,10 @@ function ViewContainer({
   );
   const [modal, setModal] = useState(false);
 
-  const onSuccessDelete = () => <Redirect to={endPointPaths.itemPath} />;
+  const onSuccessDelete = () => {
+    //setModal(false)
+    //history.replace(endPointPaths.itemPath);
+  };
 
   return (
     <React.Fragment>
@@ -52,7 +55,8 @@ function ViewContainer({
           setModal={setModal}
           deletePath={endPointPaths.getDetailEndPoint(id)}
           protectedErrorMessage={protectedErrorMessage}
-          onSuccessDelete={onSuccessDelete}
+          redirectPath={endPointPaths.itemPath}
+          onSuccessDelete={() => onSuccessDelete()}
         ></DeleteModal>
       )}
       <Box mt={2} display="flex" justifyContent="center">

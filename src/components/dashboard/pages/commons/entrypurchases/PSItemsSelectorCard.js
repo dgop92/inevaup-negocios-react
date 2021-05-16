@@ -81,6 +81,7 @@ export default function PEItemsSelectorCard({
         return childItem;
       })
     );
+    setUpdateModalState({...updateModalState, open: false});
   };
 
   return (

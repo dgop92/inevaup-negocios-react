@@ -7,6 +7,7 @@ import useFetch from "use-http";
 import PSItemsSelectorCard from "../commons/entrypurchases/PSItemsSelectorCard";
 import GeneralFormContainer from "../commons/entrypurchases/GeneralFormContainer";
 import { useForm } from "react-hook-form";
+import { Redirect } from "react-router";
 
 export default function EntryForm({ endPointPaths, inputBody: InputBody }) {
   return (
@@ -28,16 +29,22 @@ function EntryFormContainer({ endPointPaths, inputBody: InputBody }) {
   const [childItems, setChildItems] = useState([]);
   const { response, post, loading } = useFetch();
   const { handleSubmit, register, errors } = useForm();
+  const [successPk, setSuccessPk] = useState(0);
 
-  const onSuccess = (responseData) => {
+  const onSuccess = async (responseData) => {
     const responsePk = responseData.pk;
-    childItems.map(async (childItem) => {
+    for (const childItem of childItems) {
       await post(endPointPaths.childPaths.getPostEndPoint, {
         ...childItem,
         entry: responsePk,
       });
-    });
+    }
+    setSuccessPk(responsePk);
   };
+
+  if (successPk) {
+    return <Redirect to={endPointPaths.getSuccessPath(successPk)} />;
+  }
 
   //it is imposible to have a bad request error in client
   const onSubmitParent = async (data) => {
