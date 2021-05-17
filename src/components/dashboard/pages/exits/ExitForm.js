@@ -38,11 +38,11 @@ function ExitFormContainer({ endPointPaths, inputBody: InputBody }) {
       const responsePk = responseData.pk;
       let childError = false;
       for (const childItem of childItems) {
-        const res = await post(endPointPaths.childPaths.getPostEndPoint, {
+        await post(endPointPaths.childPaths.getPostEndPoint, {
           ...childItem,
           exit: responsePk,
         });
-        if (!res.ok) {
+        if (!response.ok) {
           childError = true;
         }
       }

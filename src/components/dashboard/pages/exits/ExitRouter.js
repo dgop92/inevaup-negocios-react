@@ -200,12 +200,6 @@ function CustomGeneralView({ data }) {
   );
 }
 
-const itemInputSearchOptions = {
-  inputName: "clients",
-  endpoint: "/dashboard/clients",
-  mainField: "name",
-};
-
 function ExitInputBody({ register, errors }) {
   return (
     <Box my={2}>
@@ -213,7 +207,7 @@ function ExitInputBody({ register, errors }) {
         placeholder="Buscar cliente"
         register={register}
         errors={errors}
-        itemSearchOptions={itemInputSearchOptions}
+        itemSearchOptions={itemListSearchOptions}
         inputContainerStyles={{ maxWidth: null, width: null }}
         registerOptions={{
           maxLength: {
