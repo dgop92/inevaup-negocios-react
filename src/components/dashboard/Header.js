@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   secondaryBar: {
     zIndex: 0,
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
   },
   menuButton: {
     marginLeft: -theme.spacing(1),
@@ -31,10 +31,20 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 26,
     letterSpacing: 0.5,
   },
-  helpIcon:{
-    padding: theme.spacing(1)
-  }
+  helpIcon: {
+    padding: theme.spacing(1),
+  },
 }));
+
+const mainEndPointsNames = {
+  brands: "Marcas",
+  catalogues: "Catálogos",
+  products: "Productos",
+  providers: "Provedores",
+  clients: "Clientes",
+  entries: "Entradas",
+  exits: "Salidas",
+};
 
 export default function Header({ onDrawerToggle }) {
   const classes = useStyles();
@@ -87,14 +97,14 @@ export default function Header({ onDrawerToggle }) {
                 variant="h5"
                 component="h1"
               >
-                Marcas
+                {getHeaderName()}
               </Typography>
             </Grid>
 
             <Grid item>
               <Tooltip title="Help">
                 <IconButton color="inherit" className={classes.helpIcon}>
-                  <HelpIcon/>
+                  <HelpIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -103,4 +113,15 @@ export default function Header({ onDrawerToggle }) {
       </AppBar>
     </React.Fragment>
   );
+}
+function getHeaderName() {
+  const path = window.location.href;
+  for (const key in mainEndPointsNames) {
+    if (Object.hasOwnProperty.call(mainEndPointsNames, key)) {
+      if (path.includes(key)) {
+        return mainEndPointsNames[key];
+      }
+    }
+  }
+  return "Home";
 }

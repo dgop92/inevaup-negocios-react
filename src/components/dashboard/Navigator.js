@@ -28,7 +28,7 @@ const categories = [
       { id: "Catálogos", icon: <CatalogueIcon />, pathName: "/catalogues" },
       { id: "Productos", icon: <ProductIcon />, pathName: "/products"},
       { id: "Provedores", icon: <ProviderIcon />, pathName: "/providers"},
-      { id: "Usuarios", icon: <GroupIcon />, pathName: "/users" },
+      { id: "Clientes", icon: <GroupIcon />, pathName: "/clients" },
     ],
   },
   {

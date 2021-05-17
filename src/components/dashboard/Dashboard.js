@@ -11,6 +11,8 @@ import ProductRouter from "./pages/product/ProductRouter";
 import ProviderRouter from "./pages/provider/ProviderRouter";
 import EntryRouter from "./pages/entry/EntryRouter";
 import ExitRouter from "./pages/exits/ExitRouter";
+import ClientRouter from "./pages/clients/ClientRouter";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,6 +86,7 @@ function DashboardContent() {
       <Route path={`${path}/providers`} children={<ProviderRouter />} />
       <Route path={`${path}/entries`} children={<EntryRouter />} />
       <Route path={`${path}/exits`} children={<ExitRouter />} />
+      <Route path={`${path}/clients`} children={<ClientRouter />} />
       <Route path="*" children={<Redirect to={path} />} />
     </Switch>
   );
