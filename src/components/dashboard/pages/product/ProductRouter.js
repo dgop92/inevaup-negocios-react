@@ -8,13 +8,13 @@ import {
   CardListHeader,
   SearchBar,
   OrderingBar,
-  FilterBar,
+  ItemSearchFilter,
 } from "../commons/headerInputs";
 import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import GenericItemView from "../commons/GenericItemView";
 import { getGenericPaths } from "../pathUtils";
-import { ForeginSelect } from "../commons/formUtils";
+import { ItemSearch } from "../commons/formUtils";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
@@ -90,20 +90,6 @@ const orderItems = [
   },
 ];
 
-const brandFilterOptions = {
-  endPoint: "dashboard/brands",
-  filterName: "brand",
-  label: "Marca",
-  retrieveField: "name",
-};
-
-const catalogueFilterOptions = {
-  endPoint: "dashboard/catalogues",
-  filterName: "catalogue",
-  label: "Catálogo",
-  retrieveField: "name",
-};
-
 export default function ItemRouter() {
   let { path } = useRouteMatch();
   return (
@@ -155,8 +141,20 @@ export default function ItemRouter() {
   );
 }
 
+const brandSearchOptions = {
+  inputName: "brand",
+  endpoint: "dashboard/brands",
+  mainField: "name",
+};
+
+const catalogueSearchOptions = {
+  inputName: "catalogue",
+  endpoint: "dashboard/catalogues",
+  mainField: "name",
+};
+
 function CardListContent() {
-  const { queryOptions, handleInputChange } = useQueryOptions({
+  const { queryOptions, handleInputChange, setNewPair } = useQueryOptions({
     search: "",
     ordering: "name",
     brand: "all",
@@ -176,16 +174,16 @@ function CardListContent() {
           handleInputChange={handleInputChange}
           inputContainerStyles={{ maxWidth: 350 }}
         />
-        <FilterBar
-          filterOptions={brandFilterOptions}
-          queryOptions={queryOptions}
-          handleInputChange={handleInputChange}
+        <ItemSearchFilter
+          placeholder="Filtrar por marca"
+          itemSearchOptions={brandSearchOptions}
+          setNewPair={setNewPair}
           inputContainerStyles={{ maxWidth: 350 }}
         />
-        <FilterBar
-          filterOptions={catalogueFilterOptions}
-          queryOptions={queryOptions}
-          handleInputChange={handleInputChange}
+        <ItemSearchFilter
+          placeholder="Filtrar por catálogo"
+          itemSearchOptions={catalogueSearchOptions}
+          setNewPair={setNewPair}
           inputContainerStyles={{ maxWidth: 350 }}
         />
       </CardListHeader>
@@ -281,27 +279,23 @@ function InputBody({ control, register, errors }) {
         />
       </Grid>
       <Grid item md={6} xs={12}>
-        <ForeginSelect
-          selectOptions={{
-            endPoint: "/dashboard/brands",
-            fieldName: "brand",
-            retrieveField: "name",
-            label: "Marca",
-            defaultValue: "Sin marca",
-          }}
-          control={control}
+        <ItemSearch
+          placeholder="Buscar marca"
+          register={register}
+          errors={errors}
+          itemSearchOptions={brandSearchOptions}
+          inputContainerStyles={{ maxWidth: null, width: null }}
+          extraBoxProps={{m: 0}}
         />
       </Grid>
       <Grid item md={6} xs={12}>
-        <ForeginSelect
-          selectOptions={{
-            endPoint: "/dashboard/catalogues",
-            fieldName: "catalogue",
-            retrieveField: "name",
-            label: "Catálogo",
-            defaultValue: "Sin catálogo",
-          }}
-          control={control}
+      <ItemSearch
+          placeholder="Buscar catálogo"
+          register={register}
+          errors={errors}
+          itemSearchOptions={catalogueSearchOptions}
+          inputContainerStyles={{ maxWidth: null, width: null }}
+          extraBoxProps={{m: 0}}
         />
       </Grid>
       <Grid item md={6} xs={12}>
@@ -417,9 +411,7 @@ function CustomItemView({ detailData: productData, footerProps }) {
       </Box>
       {/* Footer */}
       <Box display="flex" justifyContent="flex-end">
-        <FooterViewButton
-          {...footerProps}
-        />
+        <FooterViewButton {...footerProps} />
       </Box>
     </Paper>
   );

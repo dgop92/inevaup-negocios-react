@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import { CardList, CardListHeader, ItemSearch } from "../headerInputs";
+import { CardList, CardListHeader } from "../headerInputs";
 import PSTable from "../tables/PSTable";
 import { useForm } from "react-hook-form";
 import { FormModal } from "../modals";
@@ -9,6 +9,7 @@ import PSInputBody, {
   AmountInputBody,
   UnitPriceInputBody,
 } from "./PSInputBody";
+import { ItemSearch } from "../formUtils";
 
 const columns = [
   {

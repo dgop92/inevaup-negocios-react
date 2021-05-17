@@ -11,6 +11,11 @@ import TextField from "@material-ui/core/TextField";
 import { Controller } from "react-hook-form";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Redirect, useParams } from "react-router";
+import { SearchItemModal } from "./modals";
+import { HeaderInputContainer } from "./headerInputs"
+import { ActionIconButton } from "./tables/tableUtils";
+import SearchIcon from "@material-ui/icons/Search";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 export function FormContainer({
   paperStyles,
@@ -141,6 +146,87 @@ export function ForeginSelect({ selectOptions, control }) {
         </MenuItem>
       ))}
     </Controller>
+  );
+}
+
+export function ItemSearch({
+  placeholder,
+  itemSearchOptions,
+  inputContainerStyles,
+  registerOptions,
+  register,
+  errors,
+  extraBoxProps
+}) {
+  const boxProps = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    ...extraBoxProps,
+  };
+
+  const defaultRegOptions = {
+    required: "Este campo es requerido",
+    maxLength: {
+      value: 70,
+      message: "Demasiados caracteres",
+    },
+  }
+  const regOptions = registerOptions || defaultRegOptions;
+
+  const [modalState, setModalState] = useState({ open: false, itemValue: "" });
+
+  const customListItemOpts = {
+    onClickValue: "",
+    listItemProps: {
+      primary: "Ninguno",
+    },
+  };
+
+  return (
+    <React.Fragment>
+      {modalState.open && (
+        <SearchItemModal
+          modalState={modalState}
+          setModalState={setModalState}
+          placeholder={placeholder}
+          itemSearchOptions={itemSearchOptions}
+          customListItemOpts={customListItemOpts}
+        />
+      )}
+      <HeaderInputContainer
+        boxProps={boxProps}
+        inputContainerStyles={inputContainerStyles}
+      >
+        <TextField
+          name={itemSearchOptions.inputName}
+          placeholder={placeholder}
+          variant="outlined"
+          fullWidth
+          size="small"
+          inputProps={{
+            readOnly: true,
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <ActionIconButton
+                  toolTipTitle="Buscar"
+                  iconButtonProps={{ style: { padding: 0 } }}
+                  onClick={() => setModalState({ ...modalState, open: true })}
+                >
+                  <SearchIcon />
+                </ActionIconButton>
+              </InputAdornment>
+            )
+          }}
+          inputRef={register(regOptions)}
+          value={modalState.itemValue}
+          error={errors[itemSearchOptions.inputName] ? true : false}
+          helperText={errors[itemSearchOptions.inputName]?.message}
+        />
+      </HeaderInputContainer>
+    </React.Fragment>
   );
 }
 

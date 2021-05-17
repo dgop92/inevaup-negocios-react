@@ -4,7 +4,7 @@ import {
   useQueryOptions,
   CardListHeader,
   OrderingBar,
-  ItemSearch,
+  ItemSearchFilter,
 } from "../commons/headerInputs";
 import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
@@ -15,7 +15,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GenericItemForm from "../commons/GenericItemForm";
-
+import { ItemSearch } from "../commons/formUtils";
 
 const eePaths = getEEPaths("exits", "sales", "exit");
 
@@ -64,7 +64,7 @@ export default function ItemRouter() {
         </GenericListView>
       </Route>
       <Route path={`${path}/create`}>
-        <ExitForm endPointPaths={eePaths} inputBody={ExitInputBody}/>
+        <ExitForm endPointPaths={eePaths} inputBody={ExitInputBody} />
       </Route>
       <Route path={`${path}/view/:id`}>
         <GenericEEView
@@ -92,9 +92,20 @@ export default function ItemRouter() {
   );
 }
 
+const itemListSearchOptions = {
+  inputName: "client",
+  endpoint: "/dashboard/clients",
+  mainField: "tice",
+  secondaryFields: [
+    { displayName: "Nombre", fieldName: "name" },
+    { displayName: "Telefono", fieldName: "phone" },
+  ],
+};
+
 function CardListContent() {
-  const { queryOptions, handleInputChange } = useQueryOptions({
+  const { queryOptions, handleInputChange, setNewPair } = useQueryOptions({
     ordering: "created_date",
+    client: "all",
   });
 
   return (
@@ -105,6 +116,12 @@ function CardListContent() {
           queryOptions={queryOptions}
           handleInputChange={handleInputChange}
           inputContainerStyles={{ maxWidth: 350 }}
+        />
+        <ItemSearchFilter
+          placeholder="Buscar Clientes"
+          itemSearchOptions={itemListSearchOptions}
+          setNewPair={setNewPair}
+          inputContainerStyles={{ maxWidth: 450 }}
         />
       </CardListHeader>
       <DjangoPaginationTable
@@ -183,7 +200,7 @@ function CustomGeneralView({ data }) {
   );
 }
 
-const itemSearchOptions = {
+const itemInputSearchOptions = {
   inputName: "clients",
   endpoint: "/dashboard/clients",
   mainField: "name",
@@ -196,7 +213,7 @@ function ExitInputBody({ register, errors }) {
         placeholder="Buscar cliente"
         register={register}
         errors={errors}
-        itemSearchOptions={itemSearchOptions}
+        itemSearchOptions={itemInputSearchOptions}
         inputContainerStyles={{ maxWidth: null, width: null }}
         registerOptions={{
           maxLength: {

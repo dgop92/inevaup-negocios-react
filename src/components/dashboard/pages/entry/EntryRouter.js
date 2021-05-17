@@ -4,7 +4,6 @@ import {
   useQueryOptions,
   CardListHeader,
   OrderingBar,
-  ItemSearch,
 } from "../commons/headerInputs";
 import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
@@ -15,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GenericItemForm from "../commons/GenericItemForm";
 import GenericEEView from "../commons/entrypurchases/GenericEEView";
+import { ItemSearch } from "../commons/formUtils";
 
 const eePaths = getEEPaths("entries", "purchases", "entry");
 

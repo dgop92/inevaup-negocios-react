@@ -88,7 +88,6 @@ export function DeleteModal({
   const deleteItem = async () => {
     await del();
     if (response?.ok) {
-
       if (redirectPath) {
         history.replace(redirectPath);
       } else {
@@ -96,7 +95,7 @@ export function DeleteModal({
         onSuccessDelete();
       }
     }
-  }
+  };
 
   return (
     <BaseModal title="Avertencia" open={open} setModal={setModal}>
@@ -140,6 +139,8 @@ export function SearchItemModal({
   setModalState,
   placeholder,
   itemSearchOptions,
+  onChangeItem,
+  customListItemOpts,
 }) {
   const { queryOptions, handleInputChange } = useQueryOptions({
     search: "",
@@ -157,6 +158,9 @@ export function SearchItemModal({
 
   const onItemSelected = (itemValue) => {
     setModalState({ open: false, itemValue: itemValue });
+    if (onChangeItem) {
+      onChangeItem(itemValue);
+    }
   };
 
   return (
@@ -176,9 +180,18 @@ export function SearchItemModal({
           handleInputChange={handleInputChange}
           inputContainerStyles={{ maxWidth: null, width: null }}
         />
-        {getData.results.map((item, index) => (
-          <List key={index} component="div">
+        <List component="div">
+          {customListItemOpts && (
             <ListItem
+              button
+              onClick={() => onItemSelected(customListItemOpts.onClickValue)}
+            >
+              <ListItemText {...customListItemOpts.listItemProps} />
+            </ListItem>
+          )}
+          {getData.results.map((item, index) => (
+            <ListItem
+              key={index}
               button
               onClick={() => onItemSelected(item[itemSearchOptions.mainField])}
             >
@@ -200,8 +213,8 @@ export function SearchItemModal({
                 }
               />
             </ListItem>
-          </List>
-        ))}
+          ))}
+        </List>
       </Box>
     </BaseModal>
   );

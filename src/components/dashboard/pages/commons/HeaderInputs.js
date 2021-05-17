@@ -50,7 +50,11 @@ export function useQueryOptions(defaultQueryOptions) {
     setQueryOptions({ ...queryOptions, ...newPair });
   };
 
-  return { queryOptions, setQueryOptions, handleInputChange };
+  const setNewPair = (key, value) => {
+    setQueryOptions({ ...queryOptions, [key]: value });
+  };
+
+  return { queryOptions, setQueryOptions, handleInputChange, setNewPair };
 }
 
 export function SearchBar({ handleInputChange, inputContainerStyles }) {
@@ -140,13 +144,11 @@ export function FilterBar({
   );
 }
 
-export function ItemSearch({
-  placeholder,
+export function ItemSearchFilter({
   itemSearchOptions,
+  setNewPair,
   inputContainerStyles,
-  registerOptions,
-  register,
-  errors,
+  placeholder
 }) {
   const boxProps = {
     display: "flex",
@@ -154,16 +156,18 @@ export function ItemSearch({
     alignItems: "center",
   };
 
-  const defaultRegOptions = {
-    required: "Este campo es requerido",
-    maxLength: {
-      value: 70,
-      message: "Demasiados caracteres",
-    },
-  }
-  const regOptions = registerOptions || defaultRegOptions;
-
   const [modalState, setModalState] = useState({ open: false, itemValue: "" });
+
+  const onChangeItem = (itemValue) => {
+    setNewPair(itemSearchOptions.inputName, itemValue);
+  }
+
+  const customListItemOpts = {
+    onClickValue: "all",
+    listItemProps: {
+      primary: "Todas",
+    },
+  };
 
   return (
     <React.Fragment>
@@ -173,6 +177,8 @@ export function ItemSearch({
           setModalState={setModalState}
           placeholder={placeholder}
           itemSearchOptions={itemSearchOptions}
+          onChangeItem={onChangeItem}
+          customListItemOpts={customListItemOpts}
         />
       )}
       <HeaderInputContainer
@@ -199,19 +205,16 @@ export function ItemSearch({
                   <SearchIcon />
                 </ActionIconButton>
               </InputAdornment>
-            )
+            ),
           }}
-          inputRef={register(regOptions)}
-          value={modalState.itemValue}
-          error={errors[itemSearchOptions.inputName] ? true : false}
-          helperText={errors[itemSearchOptions.inputName]?.message}
+          value={"all" === modalState.itemValue ? "" : modalState.itemValue}
         />
       </HeaderInputContainer>
     </React.Fragment>
   );
 }
 
-function HeaderInputContainer(props) {
+export function HeaderInputContainer(props) {
   const inputContainerStyles = {
     maxWidth: 300,
     width: "100%",
