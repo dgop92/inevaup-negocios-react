@@ -1,12 +1,25 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
+
 export default function Home() {
   return (
-    <div>
-      Check a button
-      <Button variant="contained" color="secondary">
-        Primary
-      </Button>
-    </div>
+    <React.Fragment>
+      <CssBaseline />
+      <Box
+        p={3}
+        width="100vw"
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography variant="h1" color="textPrimary">
+          Home Temporal 
+        </Typography>
+      </Box>
+    </React.Fragment>
   );
 }

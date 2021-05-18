@@ -12,7 +12,10 @@ export default function App() {
 
   return (
     <APIContext.Provider value={{ authToken, setAuthToken, httpStatus }}>
-      <Provider url="http://127.0.0.1:8000" options={globalFetchOptions}>
+      <Provider
+        url={process.env.REACT_APP_API_BASE}
+        options={globalFetchOptions}
+      >
         <ThemeProvider theme={theme}>
           <SnackbarProvider
             maxSnack={3}
