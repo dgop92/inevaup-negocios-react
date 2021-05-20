@@ -97,7 +97,7 @@ export default function ItemRouter() {
 
 function CardListContent() {
   const { queryOptions, handleInputChange } = useQueryOptions({
-    ordering: "created_date",
+    ordering: "-created_date",
   });
 
   return (

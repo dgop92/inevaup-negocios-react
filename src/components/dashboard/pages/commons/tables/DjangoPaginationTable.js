@@ -122,6 +122,7 @@ export default function DjangoPaginationTable({
   tableContainerStyles,
   tableStyles,
   rowActions,
+  fetchDependencies,
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -147,11 +148,15 @@ export default function DjangoPaginationTable({
       col.displayFunction = (value) => value;
     }
   });
+
+
+
   /*
   if a brand or catalogue is not used in any product, it will rise a 400 error */
-  const {
-    data: getData = { count: 0, results: [] },
-  } = useFetch(paginationEndpoint, [page, rowsPerPage, queryOptions]);
+  const { data: getData = { count: 0, results: [] } } = useFetch(
+    paginationEndpoint,
+    [page, rowsPerPage, queryOptions, ...fetchDependencies]
+  );
 
   const rowCount = getData.count || 0;
 
@@ -223,7 +228,13 @@ DjangoPaginationTable.propTypes = {
   tableContainerStyles: PropTypes.object,
   tableStyles: PropTypes.object,
   rowActions: PropTypes.object,
+  fetchDependencies: PropTypes.array,
 };
+
+DjangoPaginationTable.defaultProps = {
+  fetchDependencies: []
+};
+
 //`${pathName}/update/${row[columnData.fieldKey]}`
 //`${pathName}/view/${row[columnData.fieldKey]}`
 function PathRowActions({ rowPath }) {

@@ -104,7 +104,7 @@ const itemListSearchOptions = {
 
 function CardListContent() {
   const { queryOptions, handleInputChange, setNewPair } = useQueryOptions({
-    ordering: "created_date",
+    ordering: "-created_date",
     client: "all",
   });
 

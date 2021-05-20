@@ -21,6 +21,7 @@ export function useApiWithAuthToken() {
   };
 
   const globalFetchOptions = {
+    cachePolicy: 'no-cache',
     interceptors: {
       request: async ({ options, url, path, route }) => {
         options.headers.Authorization = `Bearer ${authToken}`;

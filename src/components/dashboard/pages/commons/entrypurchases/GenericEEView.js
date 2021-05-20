@@ -21,7 +21,6 @@ import PSInputBody from "./PSInputBody";
 import { useSnackbar } from "notistack";
 import { DeleteModal } from "../modals";
 
-
 const colunmData = {
   fieldKey: "pk",
   columns: [
@@ -123,16 +122,17 @@ function EECardList({ endPointPaths }) {
     [endPointPaths.parentName]: id,
   });
 
-
   const [updateModal, setUpdateModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [updatePk, setUpdatePk] = useState(0);
+  const [successAction, setSuccessAction] = useState(false);
 
-  const onSuccess = () => {    
+  const onSuccess = () => {
     setUpdateModal(false);
-    enqueueSnackbar("Item actualizado exitosamente", { 
-      variant: 'success',
-    })
+    enqueueSnackbar("Item actualizado exitosamente", {
+      variant: "success",
+    });
+    setSuccessAction(!successAction);
   };
   const postPath = endPointPaths.childPaths.getPostEndPoint;
   const itemPath = endPointPaths.childPaths.itemPath;
@@ -156,10 +156,11 @@ function EECardList({ endPointPaths }) {
   };
 
   const onSuccessDelete = () => {
-    enqueueSnackbar("Item eliminado exitosamente", { 
-      variant: 'success',
+    enqueueSnackbar("Item eliminado exitosamente", {
+      variant: "success",
       preventDuplicate: true,
-    })
+    });
+    setSuccessAction(!successAction);
   };
 
   return (
@@ -203,6 +204,7 @@ function EECardList({ endPointPaths }) {
           tableStyles={{ minWidth: 850 }}
           queryOptions={queryOptions}
           rowActions={rowActions}
+          fetchDependencies={[successAction]}
         />
       </CardList>
     </React.Fragment>
