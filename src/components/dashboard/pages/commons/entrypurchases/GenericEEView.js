@@ -137,7 +137,7 @@ function EECardList({ endPointPaths }) {
   const postPath = endPointPaths.childPaths.getPostEndPoint;
   const itemPath = endPointPaths.childPaths.itemPath;
 
-  const { register, onSubmit, errors, loading } = useFormRequest({
+  const { control, onSubmit, errors, loading } = useFormRequest({
     itemPath: postPath,
     updatePk: updatePk,
     updateWithPatch: true,
@@ -180,7 +180,7 @@ function EECardList({ endPointPaths }) {
           modalTitle="Actualizar compra"
         >
           <form onSubmit={onSubmit}>
-            <PSInputBody register={register} errors={errors}></PSInputBody>
+            <PSInputBody control={control} errors={errors}></PSInputBody>
             <FormFooter mt={2} title="Actualizar" loading={loading} />
           </form>
         </UpdateModal>

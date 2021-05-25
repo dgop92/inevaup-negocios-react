@@ -157,7 +157,8 @@ export function SearchItemModal({
   ]);
 
   const onItemSelected = (item) => {
-    setModalState({ open: false, itemValue: item[itemSearchOptions.mainField]});
+    const itemValue = item[itemSearchOptions.mainField] || ""
+    setModalState({ open: false, itemValue: itemValue});
     if (onChangeItem) {
       onChangeItem(item);
     }

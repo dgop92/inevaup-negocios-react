@@ -246,7 +246,7 @@ export function useFormRequest({
     control,
     register,
     handleSubmit,
-    setValue,
+    reset,
     setError,
     errors,
   } = useForm();
@@ -279,8 +279,8 @@ export function useFormRequest({
 
   const loadDefaultData = useCallback(async () => {
     const itemData = await get(endPoint);
-    if (response.ok) setDefaultValues(setValue, itemData);
-  }, [get, endPoint, response, setValue]);
+    if (response.ok) setDefaultValues(reset, itemData);
+  }, [get, endPoint, response, reset]);
 
   const nonFieldErros = resData?.non_field_errors;
 
@@ -310,8 +310,6 @@ export function setResponseErrors(setError, responseErrors) {
   }
 }
 
-export function setDefaultValues(setValue, defaultData) {
-  for (const key in defaultData) {
-    if (key !== "pk") setValue(key, defaultData[key]);
-  }
+export function setDefaultValues(reset, defaultData) {
+  reset(defaultData);
 }

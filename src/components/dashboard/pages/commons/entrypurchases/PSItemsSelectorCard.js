@@ -43,7 +43,8 @@ export default function PEItemsSelectorCard({
   setChildItems,
   updateAmountTitle,
 }) {
-  const { register, handleSubmit, errors, setValue, reset } = useForm();
+  const { control, register, handleSubmit, errors, setValue, reset } =
+    useForm();
   const [updateModalState, setUpdateModalState] = useState({
     open: false,
     formArgs: undefined,
@@ -88,9 +89,9 @@ export default function PEItemsSelectorCard({
 
   const onChangeItem = (item) => {
     if (window.location.pathname.includes("entries")) {
-      setValue("unit_price", item.purchase_price);
+      setValue("unit_price", item?.purchase_price || "");
     } else {
-      setValue("unit_price", item.sale_price);
+      setValue("unit_price", item?.sale_price || "");
     }
   };
 
@@ -132,7 +133,7 @@ export default function PEItemsSelectorCard({
             display="flex"
             alignItems="center"
           >
-            <AmountInputBody register={register} errors={errors} />
+            <AmountInputBody control={control} errors={errors} />
           </Box>
           <Box
             m={1}
@@ -141,7 +142,7 @@ export default function PEItemsSelectorCard({
             display="flex"
             alignItems="center"
           >
-            <UnitPriceInputBody register={register} errors={errors} />
+            <UnitPriceInputBody control={control} errors={errors} />
           </Box>
           <Box
             m={1}

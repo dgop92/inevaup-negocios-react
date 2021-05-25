@@ -1,17 +1,20 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
+import { Controller } from "react-hook-form";
 
-export function AmountInputBody({ register, errors }) {
+export function AmountInputBody({ control, errors }) {
   return (
-    <TextField
+    <Controller
+      as={TextField}
+      control={control}
       name="amount"
       label="Cantidad"
       size="small"
       fullWidth
       variant="outlined"
       type="number"
-      inputRef={register({
+      rules={{
         required: "Este campo es requerido",
         maxLength: {
           value: 70,
@@ -21,24 +24,26 @@ export function AmountInputBody({ register, errors }) {
           value: 1,
           message: "La cantidad debe ser positiva",
         },
-      })}
+      }}
+      defaultValue=""
       error={errors.amount ? true : false}
       helperText={errors?.amount?.message}
-    />
+    ></Controller>
   );
 }
 
-export function UnitPriceInputBody({ register, errors }) {
+export function UnitPriceInputBody({ control, errors }) {
   return (
-    <TextField
+    <Controller
+      as={TextField}
+      control={control}
       name="unit_price"
       label="Precio Unitario"
       size="small"
       fullWidth
       variant="outlined"
       type="number"
-      inputProps={{step: 0.01}}
-      inputRef={register({
+      rules={{
         required: "Este campo es requerido",
         maxLength: {
           value: 18,
@@ -48,18 +53,20 @@ export function UnitPriceInputBody({ register, errors }) {
           value: 1,
           message: "La cantidad debe ser positiva",
         },
-      })}
+      }}
+      inputProps={{ step: 0.01 }}
+      defaultValue=""
       error={errors.unit_price ? true : false}
       helperText={errors?.unit_price?.message}
     />
   );
 }
 
-export default function PSInputBody({ register, errors }) {
+export default function PSInputBody({ control, errors }) {
   return (
     <Box display="grid" gridGap="1rem" my={2}>
-      <AmountInputBody register={register} errors={errors} />
-      <UnitPriceInputBody register={register} errors={errors} />
+      <AmountInputBody control={control} errors={errors} />
+      <UnitPriceInputBody control={control} errors={errors} />
     </Box>
   );
 }
