@@ -37,6 +37,7 @@ export function UnitPriceInputBody({ register, errors }) {
       fullWidth
       variant="outlined"
       type="number"
+      inputProps={{step: 0.01}}
       inputRef={register({
         required: "Este campo es requerido",
         maxLength: {

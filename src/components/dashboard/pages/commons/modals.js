@@ -156,10 +156,10 @@ export function SearchItemModal({
     queryOptions,
   ]);
 
-  const onItemSelected = (itemValue) => {
-    setModalState({ open: false, itemValue: itemValue });
+  const onItemSelected = (item) => {
+    setModalState({ open: false, itemValue: item[itemSearchOptions.mainField]});
     if (onChangeItem) {
-      onChangeItem(itemValue);
+      onChangeItem(item);
     }
   };
 
@@ -193,7 +193,7 @@ export function SearchItemModal({
             <ListItem
               key={index}
               button
-              onClick={() => onItemSelected(item[itemSearchOptions.mainField])}
+              onClick={() => onItemSelected(item)}
             >
               <ListItemText
                 primary={item[itemSearchOptions.mainField]}

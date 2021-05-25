@@ -156,7 +156,8 @@ export function ItemSearch({
   registerOptions,
   register,
   errors,
-  extraBoxProps
+  extraBoxProps,
+  onChangeItem
 }) {
   const boxProps = {
     display: "flex",
@@ -192,6 +193,7 @@ export function ItemSearch({
           placeholder={placeholder}
           itemSearchOptions={itemSearchOptions}
           customListItemOpts={customListItemOpts}
+          onChangeItem={onChangeItem}
         />
       )}
       <HeaderInputContainer

@@ -158,8 +158,8 @@ export function ItemSearchFilter({
 
   const [modalState, setModalState] = useState({ open: false, itemValue: "" });
 
-  const onChangeItem = (itemValue) => {
-    setNewPair(itemSearchOptions.inputName, itemValue);
+  const onChangeItem = (item) => {
+    setNewPair(itemSearchOptions.inputName, item[itemSearchOptions.mainField]);
   }
 
   const customListItemOpts = {

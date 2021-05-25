@@ -43,7 +43,7 @@ export default function PEItemsSelectorCard({
   setChildItems,
   updateAmountTitle,
 }) {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, setValue, reset } = useForm();
   const [updateModalState, setUpdateModalState] = useState({
     open: false,
     formArgs: undefined,
@@ -51,6 +51,7 @@ export default function PEItemsSelectorCard({
 
   const onSubmit = (data) => {
     setChildItems([...childItems, data]);
+    reset();
   };
 
   const rowActions = {
@@ -82,7 +83,15 @@ export default function PEItemsSelectorCard({
         return childItem;
       })
     );
-    setUpdateModalState({...updateModalState, open: false});
+    setUpdateModalState({ ...updateModalState, open: false });
+  };
+
+  const onChangeItem = (item) => {
+    if (window.location.pathname.includes("entries")) {
+      setValue("unit_price", item.purchase_price);
+    } else {
+      setValue("unit_price", item.sale_price);
+    }
   };
 
   return (
@@ -114,6 +123,7 @@ export default function PEItemsSelectorCard({
             errors={errors}
             itemSearchOptions={itemSearchOptions}
             inputContainerStyles={{ maxWidth: 450 }}
+            onChangeItem={onChangeItem}
           />
           <Box
             m={1}
@@ -141,7 +151,7 @@ export default function PEItemsSelectorCard({
             justifyContent="flex-end"
           >
             <Button type="submit" variant="contained" color="primary">
-              Agregrar
+              Agregar
             </Button>
           </Box>
         </CardListHeader>
