@@ -12,6 +12,7 @@ import ProviderRouter from "./pages/provider/ProviderRouter";
 import EntryRouter from "./pages/entry/EntryRouter";
 import ExitRouter from "./pages/exits/ExitRouter";
 import ClientRouter from "./pages/clients/ClientRouter";
+import DashboardHome from "./DashboardHome";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -79,7 +80,7 @@ function DashboardContent() {
 
   return (
     <Switch>
-      <Route exact path={path} children={<div> Dashboard Home </div>} />
+      <Route exact path={path} children={<DashboardHome />} />
       <Route path={`${path}/brands`} children={<BrandRouter />} />
       <Route path={`${path}/catalogues`} children={<CatalogueRouter />} />
       <Route path={`${path}/products`} children={<ProductRouter />} />
