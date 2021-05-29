@@ -20,6 +20,7 @@ import { useFormRequest } from "../formUtils";
 import PSInputBody from "./PSInputBody";
 import { useSnackbar } from "notistack";
 import { DeleteModal } from "../modals";
+import { formatCurrency } from "../../../../utils";
 
 const colunmData = {
   fieldKey: "pk",
@@ -35,6 +36,7 @@ const colunmData = {
     {
       field: "unit_price",
       headerName: "Precio Unitario",
+      displayFunction: (value) => formatCurrency(value, "es-CO", "COP"),
     },
   ],
 };

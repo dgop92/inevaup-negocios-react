@@ -10,6 +10,7 @@ import PSInputBody, {
   UnitPriceInputBody,
 } from "./PSInputBody";
 import { ItemSearch } from "../formUtils";
+import { formatCurrency } from "../../../../utils";
 
 const columns = [
   {
@@ -23,6 +24,7 @@ const columns = [
   {
     field: "unit_price",
     headerName: "Precio Unitario",
+    displayFunction: (value) => formatCurrency(value, "es-CO", "COP"),
   },
 ];
 
@@ -32,8 +34,16 @@ const itemSearchOptions = {
   mainField: "code",
   secondaryFields: [
     { displayName: "Nombre", fieldName: "name" },
-    { displayName: "Precio venta", fieldName: "sale_price" },
-    { displayName: "Precio compra", fieldName: "purchase_price" },
+    {
+      displayName: "Precio venta",
+      fieldName: "sale_price",
+      displayFunction: (value) => formatCurrency(value, "es-CO", "COP"),
+    },
+    {
+      displayName: "Precio compra",
+      fieldName: "purchase_price",
+      displayFunction: (value) => formatCurrency(value, "es-CO", "COP"),
+    },
     { displayName: "Stock", fieldName: "stock" },
   ],
 };

@@ -157,12 +157,18 @@ export function SearchItemModal({
   ]);
 
   const onItemSelected = (item) => {
-    const itemValue = item[itemSearchOptions.mainField] || ""
-    setModalState({ open: false, itemValue: itemValue});
+    const itemValue = item[itemSearchOptions.mainField] || "";
+    setModalState({ open: false, itemValue: itemValue });
     if (onChangeItem) {
       onChangeItem(item);
     }
   };
+
+  itemSearchOptions?.secondaryFields?.forEach((secField) => {
+    if (!secField.displayFunction) {
+      secField.displayFunction = (value) => value;
+    }
+  });
 
   return (
     <BaseModal
@@ -191,11 +197,7 @@ export function SearchItemModal({
             </ListItem>
           )}
           {getData.results.map((item, index) => (
-            <ListItem
-              key={index}
-              button
-              onClick={() => onItemSelected(item)}
-            >
+            <ListItem key={index} button onClick={() => onItemSelected(item)}>
               <ListItemText
                 primary={item[itemSearchOptions.mainField]}
                 secondary={
@@ -203,9 +205,11 @@ export function SearchItemModal({
                     {itemSearchOptions?.secondaryFields?.map(
                       (secondaryField, index) => (
                         <React.Fragment key={index}>
-                          {`${secondaryField.displayName} : ${
+                          {`${
+                            secondaryField.displayName
+                          } : ${secondaryField.displayFunction(
                             item[secondaryField.fieldName]
-                          }`}
+                          )}`}
                           <br />
                         </React.Fragment>
                       )

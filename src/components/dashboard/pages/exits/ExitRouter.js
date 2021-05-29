@@ -16,13 +16,13 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GenericItemForm from "../commons/GenericItemForm";
 import { ItemSearch } from "../commons/formUtils";
+import {
+  fromUTCDateStringToDisplayDate,
+  formatCurrency,
+  ValueTypography,
+} from "../../../utils";
 
 const eePaths = getEEPaths("exits", "sales", "exit");
-
-function fromUTCDateStringToDisplayDate(UTCdate) {
-  const localDate = new Date(UTCdate);
-  return localDate.toLocaleString();
-}
 
 const colunmData = {
   fieldKey: "pk",
@@ -139,9 +139,15 @@ function CustomGeneralView({ data }) {
     <React.Fragment>
       {/* Header */}
       <Box mb={2}>
-        <Typography variant="h6" style={{ marginBottom: 5 }}>
-          {`Salida Numero ${data?.pk}`}
-        </Typography>
+        <ValueTypography
+          preFixedString="Salida número "
+          value={data?.pk}
+          typographyProps={{
+            variant: "h6",
+            color: "textPrimary",
+            style: { marginBottom: 5 },
+          }}
+        />
         <Divider />
       </Box>
       {/* Content */}
@@ -161,17 +167,24 @@ function CustomGeneralView({ data }) {
             >
               General
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Cliente: ${data.client || "Sin cliente"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Usuario Encargado: ${data.user || "Usuario"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Fecha: ${
-                fromUTCDateStringToDisplayDate(data.created_date) || "Fecha"
-              }`}
-            </Typography>
+            <ValueTypography
+              getValueOptions={{ nullMessage: "Sin cliente" }}
+              preFixedString="Cliente: "
+              value={data?.client}
+            />
+            <ValueTypography
+              getValueOptions={{ nullMessage: "Sin usuario" }}
+              preFixedString="Usuario encargado: "
+              value={data?.user}
+            />
+            <ValueTypography
+              getValueOptions={{
+                formatFunction: (value) =>
+                  fromUTCDateStringToDisplayDate(value),
+              }}
+              preFixedString="Fecha de creación: "
+              value={data?.created_date}
+            />
           </Box>
 
           <Box
@@ -187,12 +200,18 @@ function CustomGeneralView({ data }) {
             >
               Informacion sobre compras
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Unidades vendidas: ${data.units_sold || "Unidades"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Total vendido: ${data.total_sold || "Total"}`}
-            </Typography>
+            <ValueTypography
+              preFixedString="Unidades vendidas: "
+              value={data.units_sold}
+            />
+            <ValueTypography
+              getValueOptions={{
+                formatFunction: (value) =>
+                  formatCurrency(value, "es-CO", "COP"),
+              }}
+              preFixedString="Total vendido: "
+              value={data.total_sold }
+            />
           </Box>
         </Box>
       </Box>

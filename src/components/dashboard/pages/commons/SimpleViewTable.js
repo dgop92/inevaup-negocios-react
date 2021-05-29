@@ -4,6 +4,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
+import { getValueFromRawValue } from "../../../utils";
 
 export default function SimpleViewTable({
   keysData,
@@ -19,7 +20,7 @@ export default function SimpleViewTable({
             <TableRow key={index}>
               <TableCell {...keyData.cellProps}>{keyData.name}</TableCell>
               <TableCell {...keyData.cellProps}>
-                {data[keyData.field] || "Cargando..."}
+                {getValueFromRawValue(data[keyData.field])}
               </TableCell>
             </TableRow>
           ))}

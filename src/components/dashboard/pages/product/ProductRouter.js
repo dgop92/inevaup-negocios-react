@@ -20,6 +20,7 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { FooterViewButton } from "../commons/SimpleViewCard";
+import { formatCurrency, ValueTypography } from "../../../utils";
 
 const genericPaths = getGenericPaths("products");
 
@@ -37,6 +38,7 @@ const colunmData = {
     {
       field: "sale_price",
       headerName: "Precio Venta",
+      displayFunction: (value) => formatCurrency(value, "es-CO", "COP"),
       cellProps: {
         align: "right",
       },
@@ -44,6 +46,7 @@ const colunmData = {
     {
       field: "purchase_price",
       headerName: "Precio Compra",
+      displayFunction: (value) => formatCurrency(value, "es-CO", "COP"),
       cellProps: {
         align: "right",
       },
@@ -285,17 +288,17 @@ function InputBody({ control, register, errors }) {
           errors={errors}
           itemSearchOptions={brandSearchOptions}
           inputContainerStyles={{ maxWidth: null, width: null }}
-          extraBoxProps={{m: 0}}
+          extraBoxProps={{ m: 0 }}
         />
       </Grid>
       <Grid item md={6} xs={12}>
-      <ItemSearch
+        <ItemSearch
           placeholder="Buscar catálogo"
           register={register}
           errors={errors}
           itemSearchOptions={catalogueSearchOptions}
           inputContainerStyles={{ maxWidth: null, width: null }}
-          extraBoxProps={{m: 0}}
+          extraBoxProps={{ m: 0 }}
         />
       </Grid>
       <Grid item md={6} xs={12}>
@@ -322,16 +325,22 @@ function CustomItemView({ detailData: productData, footerProps }) {
     <Paper style={{ width: "100%", maxWidth: 950, padding: "1.5rem" }}>
       {/* Header */}
       <Box mb={2}>
-        <Typography variant="h6" style={{ marginBottom: 5 }}>
-          {productData.name || "Nombre del Producto"}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          style={{ marginBottom: "1rem" }}
-        >
-          {`Código: ${productData.code || "Código del Producto"}`}
-        </Typography>
+        <ValueTypography
+          value={productData?.name}
+          typographyProps={{
+            variant: "h6",
+            color: "textPrimary",
+            style: { marginBottom: 5 },
+          }}
+        />
+        <ValueTypography
+          preFixedString="Código: "
+          value={productData?.code}
+          typographyProps={{
+            color: "textSecondary",
+            style: { marginBottom: "1rem" },
+          }}
+        />
         <Divider />
       </Box>
       {/* Content */}
@@ -351,12 +360,14 @@ function CustomItemView({ detailData: productData, footerProps }) {
             >
               Clasificación
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Catálogo: ${productData.catalogue || "Catálogo"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Marca: ${productData.brand || "Marca"}`}
-            </Typography>
+            <ValueTypography
+              preFixedString="Catálogo: "
+              value={productData?.catalogue}
+            />
+            <ValueTypography
+              preFixedString="Marca: "
+              value={productData?.brand}
+            />
           </Box>
 
           <Box
@@ -372,12 +383,22 @@ function CustomItemView({ detailData: productData, footerProps }) {
             >
               Precios
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Compra: ${productData.purchase_price || "Compra"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Venta: ${productData.sale_price || "Venta"}`}
-            </Typography>
+            <ValueTypography
+              preFixedString="Compra: "
+              value={productData?.purchase_price}
+              getValueOptions={{
+                formatFunction: (value) =>
+                  formatCurrency(value, "es-CO", "COP"),
+              }}
+            />
+            <ValueTypography
+              preFixedString="Venta: "
+              value={productData?.sale_price}
+              getValueOptions={{
+                formatFunction: (value) =>
+                  formatCurrency(value, "es-CO", "COP"),
+              }}
+            />
           </Box>
         </Box>
         {/* Line 2 */}
@@ -389,9 +410,9 @@ function CustomItemView({ detailData: productData, footerProps }) {
             >
               Descripción
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {productData.details}
-            </Typography>
+            <ValueTypography
+              value={productData?.details}
+            />
           </Box>
         </Box>
         {/* Line 3 */}
@@ -403,9 +424,10 @@ function CustomItemView({ detailData: productData, footerProps }) {
             >
               Stock
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Cantidad Disponible: ${productData?.stock || "Sin Unidades"}`}
-            </Typography>
+            <ValueTypography
+              preFixedString="Cantidad Disponible: "
+              value={productData?.stock}
+            />
           </Box>
         </Box>
       </Box>

@@ -8,20 +8,20 @@ import {
 import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import { getEEPaths } from "../pathUtils";
-import EntryForm from "./EntryForm"
+import EntryForm from "./EntryForm";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GenericItemForm from "../commons/GenericItemForm";
 import GenericEEView from "../commons/entrypurchases/GenericEEView";
 import { ItemSearch } from "../commons/formUtils";
+import {
+  formatCurrency,
+  fromUTCDateStringToDisplayDate,
+  ValueTypography,
+} from "../../../utils";
 
 const eePaths = getEEPaths("entries", "purchases", "entry");
-
-function fromUTCDateStringToDisplayDate(UTCdate) {
-  const localDate = new Date(UTCdate);
-  return localDate.toLocaleString();
-}
 
 const colunmData = {
   fieldKey: "pk",
@@ -145,9 +145,15 @@ function CustomGeneralView({ data }) {
     <React.Fragment>
       {/* Header */}
       <Box mb={2}>
-        <Typography variant="h6" style={{ marginBottom: 5 }}>
-          {`Entrada Numero ${data?.pk}`}
-        </Typography>
+        <ValueTypography
+          preFixedString="Entrada número "
+          value={data?.pk}
+          typographyProps={{
+            variant: "h6",
+            color: "textPrimary",
+            style: { marginBottom: 5 },
+          }}
+        />
         <Divider />
       </Box>
       {/* Content */}
@@ -167,17 +173,24 @@ function CustomGeneralView({ data }) {
             >
               General
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Proveedor: ${data.provider || "Proveedor"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Usuario Encargado: ${data.user || "Usuario"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Fecha: ${
-                fromUTCDateStringToDisplayDate(data.created_date) || "Fecha"
-              }`}
-            </Typography>
+            <ValueTypography
+              getValueOptions={{ nullMessage: "Sin proveedor" }}
+              preFixedString="Proveedor: "
+              value={data?.provider}
+            />
+            <ValueTypography
+              getValueOptions={{ nullMessage: "Sin usuario" }}
+              preFixedString="Usuario encargado: "
+              value={data?.user}
+            />
+            <ValueTypography
+              getValueOptions={{
+                formatFunction: (value) =>
+                  fromUTCDateStringToDisplayDate(value),
+              }}
+              preFixedString="Fecha de creación: "
+              value={data?.created_date}
+            />
           </Box>
 
           <Box
@@ -193,12 +206,18 @@ function CustomGeneralView({ data }) {
             >
               Informacion sobre compras
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Unidades compradas: ${data.units_bought || "Unidades"}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {`Total gastado: ${data.total_spent || "Total"}`}
-            </Typography>
+            <ValueTypography
+              preFixedString="Unidades compradas: "
+              value={data.units_bought}
+            />
+            <ValueTypography
+              getValueOptions={{
+                formatFunction: (value) =>
+                  formatCurrency(value, "es-CO", "COP"),
+              }}
+              preFixedString="Total gastado: "
+              value={data.total_spent}
+            />
           </Box>
         </Box>
       </Box>

@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Chart from "react-apexcharts";
 import useFetch from "use-http";
+import { formatCurrency, ValueTypography } from "../utils";
 
 function getDefaultDays() {
   const days = [];
@@ -39,7 +40,7 @@ export default function DashboardHome() {
         <MonthlyStatus />
       </Grid>
       <Grid item md={8} xs={12}>
-        <BestProductChart ></BestProductChart>
+        <BestProductChart></BestProductChart>
       </Grid>
       <Grid item md={9} xs={12}>
         <FewProductChart />
@@ -76,9 +77,15 @@ function MonthlyStatus() {
           <Typography variant="body2" color="textPrimary">
             Venta total:
           </Typography>
-          <Typography variant="body2" color="textPrimary">
-            {data?.monthly_sold || "Sin datos"}
-          </Typography>
+          <ValueTypography
+            value={data?.monthly_sold}
+            getValueOptions={{
+              formatFunction: (value) => formatCurrency(value, "es-CO", "COP"),
+            }}
+            typographyProps={{
+              color: "textPrimary",
+            }}
+          />
         </Box>
         <Box
           px={1}
@@ -89,9 +96,15 @@ function MonthlyStatus() {
           <Typography variant="body2" color="textPrimary">
             Gasto total:
           </Typography>
-          <Typography variant="body2" color="textPrimary">
-            {data?.monthly_spent || "Sin datos"}
-          </Typography>
+          <ValueTypography
+            value={data?.monthly_spent}
+            getValueOptions={{
+              formatFunction: (value) => formatCurrency(value, "es-CO", "COP"),
+            }}
+            typographyProps={{
+              color: "textPrimary",
+            }}
+          />
         </Box>
         <Box
           px={1}
@@ -102,9 +115,15 @@ function MonthlyStatus() {
           <Typography variant="body2" color="textPrimary">
             Ganancias:
           </Typography>
-          <Typography variant="body2" color="textPrimary">
-            {data?.monthly_profit || "Sin datos"}
-          </Typography>
+          <ValueTypography
+            value={data?.monthly_profit}
+            getValueOptions={{
+              formatFunction: (value) => formatCurrency(value, "es-CO", "COP"),
+            }}
+            typographyProps={{
+              color: "textPrimary",
+            }}
+          />
         </Box>
       </Box>
     </Paper>
@@ -145,6 +164,13 @@ function SaleChart() {
       xaxis: {
         categories: getDefaultDays(),
       },
+      yaxis: {
+        labels: {
+          formatter: function (val, index) {
+            return formatCurrency(val, "es-CO", "COP");
+          },
+        },
+      },
     },
   });
 
@@ -163,7 +189,12 @@ function SaleChart() {
             data: seriesData.daily_sales,
           },
         ],
-        options: dailySales.options,
+        options: {
+          ...dailySales.options,
+          xaxis: {
+            categories: seriesData.month_days,
+          },
+        },
       }));
     }
   }, [setDailySales, get, response]);
@@ -218,6 +249,16 @@ function BestProductChart() {
       dataLabels: {
         enabled: false,
       },
+      tooltip: {
+        y: {
+          formatter: function (
+            value,
+            { series, seriesIndex, dataPointIndex, w }
+          ) {
+            return formatCurrency(value, "es-CO", "COP");
+          },
+        },
+      },
       xaxis: {
         categories: [
           "Product 1",
@@ -226,14 +267,17 @@ function BestProductChart() {
           "Product 4",
           "Product 5",
         ],
+        labels: {
+          formatter: function (val, index) {
+            return formatCurrency(val, "es-CO", "COP");
+          },
+        },
       },
     },
   });
 
   const loadBestProducts = useCallback(async () => {
-    const seriesData = await get(
-      "dashboard/queries/best_products"
-    );
+    const seriesData = await get("dashboard/queries/best_products");
     if (response.ok) {
       setBestProducts((bestProducts) => ({
         series: [
@@ -245,7 +289,7 @@ function BestProductChart() {
         options: {
           ...bestProducts.options,
           xaxis: {
-            categories: seriesData.best_product_by_sales.products
+            categories: seriesData.best_product_by_sales.products,
           },
         },
       }));
@@ -314,9 +358,7 @@ function FewProductChart() {
   });
 
   const loadFewProducts = useCallback(async () => {
-    const seriesData = await get(
-      "dashboard/queries/product_with_few_stocks"
-    );
+    const seriesData = await get("dashboard/queries/product_with_few_stocks");
     if (response.ok) {
       setFewProducts((fewProducts) => ({
         series: [
@@ -328,7 +370,7 @@ function FewProductChart() {
         options: {
           ...fewProducts.options,
           xaxis: {
-            categories: seriesData.products
+            categories: seriesData.products,
           },
         },
       }));

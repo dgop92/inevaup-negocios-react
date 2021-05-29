@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import GeneralFormContainer from "../commons/entrypurchases/GeneralFormContainer";
 import { Redirect } from "react-router";
 import { useSnackbar } from "notistack";
+import { formatCurrency, ValueTypography } from "../../../utils";
 
 function roundTo2Places(num) {
   return Math.round(num * 100) / 100;
@@ -136,9 +137,13 @@ function ExitFormContainer({ endPointPaths, inputBody: InputBody }) {
               >
                 Total a pagar:
               </Typography>
-              <Typography variant="body2" color="textSecondary">
-                {exitPaymentState.totalToPay}
-              </Typography>
+              <ValueTypography
+                value={exitPaymentState.totalToPay}
+                getValueOptions={{
+                  formatFunction: (value) =>
+                    formatCurrency(value, "es-CO", "COP"),
+                }}
+              />
             </Grid>
             <Grid item lg={4} md={6} xs={12}>
               <Typography
@@ -147,9 +152,13 @@ function ExitFormContainer({ endPointPaths, inputBody: InputBody }) {
               >
                 Cambio
               </Typography>
-              <Typography variant="body2" color="textSecondary">
-                {exitPaymentState.moneyToReturn}
-              </Typography>
+              <ValueTypography
+                value={exitPaymentState.moneyToReturn}
+                getValueOptions={{
+                  formatFunction: (value) =>
+                    formatCurrency(value, "es-CO", "COP"),
+                }}
+              />
             </Grid>
             <Grid item lg={4} md={6} xs={12}>
               <TextField
