@@ -181,7 +181,7 @@ export function SearchItemModal({
         flexDirection="column"
         p={2}
         maxHeight={650}
-        style={{ overflowY: "scroll" }}
+        style={{ overflowY: "auto" }}
       >
         <SearchBar
           handleInputChange={handleInputChange}

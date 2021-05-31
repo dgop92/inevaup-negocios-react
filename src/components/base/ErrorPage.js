@@ -19,7 +19,7 @@ export default function ErrorPage({ title, subTitle }) {
   const history = useHistory();
 
   const goBackToHome = () => {
-    history.replace("/");
+    history.replace("/dashboard");
     history.go(0);
   };
 
@@ -48,7 +48,7 @@ export default function ErrorPage({ title, subTitle }) {
           variant="contained"
           onClick={goBackToHome}
         >
-          Regresar al home
+          Regresar al dashboard
         </Button>
       </Box>
     </React.Fragment>
