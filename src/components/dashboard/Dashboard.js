@@ -13,6 +13,7 @@ import EntryRouter from "./pages/entry/EntryRouter";
 import ExitRouter from "./pages/exits/ExitRouter";
 import ClientRouter from "./pages/clients/ClientRouter";
 import DashboardHome from "./DashboardHome";
+import Invoice from "./pages/Invoice";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -88,6 +89,7 @@ function DashboardContent() {
       <Route path={`${path}/entries`} children={<EntryRouter />} />
       <Route path={`${path}/exits`} children={<ExitRouter />} />
       <Route path={`${path}/clients`} children={<ClientRouter />} />
+      <Route path={`${path}/invoices/:id`} children={<Invoice />} />
       <Route path="*" children={<Redirect to={path} />} />
     </Switch>
   );

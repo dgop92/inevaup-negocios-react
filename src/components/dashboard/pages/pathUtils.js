@@ -13,6 +13,7 @@ export function getEEPaths(itemName, childItemName, parentName) {
     parentName: parentName,
     itemPath: `/dashboard/${itemName}`,
     getSuccessPath: (pk) => `/dashboard/${itemName}/view/${pk}`,
+    getInvoicePath: (pk) => `/dashboard/invoices/${pk}`,
     parentPaths: {
       updatePath: (pk) => `/dashboard/${itemName}/update/${pk}`,
       getPostEndPoint: `/dashboard/${itemName}/`,

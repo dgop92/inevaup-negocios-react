@@ -3,10 +3,12 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import SimplePageHeader from "../SimplePageHeader";
 import { useParams } from "react-router";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import useFetch from "use-http";
 import { FooterViewButton } from "../SimpleViewCard";
 import DjangoPaginationTable from "../tables/DjangoPaginationTable";
+import { Link as RouterLink } from "react-router-dom";
 import {
   useQueryOptions,
   CardList,
@@ -110,6 +112,24 @@ function ViewContainer({
         </Paper>
       </Box>
       <EECardList endPointPaths={endPointPaths} />
+      {window.location.pathname.includes("exits") && (
+        <Box
+          style={{ width: "100%", padding: "1.5rem" }}
+          mt={2}
+          display="flex"
+          justifyContent="flex-end"
+          component={Paper}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            component={RouterLink}
+            to={endPointPaths.getInvoicePath(id)}
+          >
+            Ver factura
+          </Button>
+        </Box>
+      )}
     </React.Fragment>
   );
 }
