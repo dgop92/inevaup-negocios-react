@@ -13,6 +13,7 @@ import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import GenericItemView from "../commons/GenericItemView";
 import { getGenericPaths } from "../pathUtils";
+import { Controller } from "react-hook-form";
 
 const genericPaths = getGenericPaths("brands");
 
@@ -95,25 +96,28 @@ export default function ItemRouter() {
   );
 }
 
-function InputBody({ register, errors }) {
+function InputBody({ control, errors }) {
   return (
     <Box my={2}>
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="name"
         label="Nombre"
         size="small"
         fullWidth
         variant="outlined"
         autoFocus
-        inputRef={register({
+        rules={{
           required: "Este campo es requerido",
           maxLength: {
             value: 70,
             message: "Demasiados caracteres",
           },
-        })}
+        }}
         error={errors.name ? true : false}
         helperText={errors?.name?.message}
+        defaultValue=""
       />
     </Box>
   );

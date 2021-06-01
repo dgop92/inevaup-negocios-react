@@ -13,6 +13,7 @@ import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import GenericItemView from "../commons/GenericItemView";
 import { getGenericPaths } from "../pathUtils";
+import { Controller } from "react-hook-form";
 
 const genericPaths = getGenericPaths("clients");
 
@@ -86,7 +87,7 @@ export default function ItemRouter() {
           pageHeaderTitle="Ver cliente"
           endPointPaths={genericPaths}
           viewContainerProps={{
-            keysData: keysData
+            keysData: keysData,
           }}
         />
       </Route>
@@ -109,55 +110,64 @@ export default function ItemRouter() {
   );
 }
 
-function InputBody({ register, errors }) {
+function InputBody({ control, errors }) {
   return (
     <Box display="grid" gridGap="1rem" my={2}>
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="name"
         label="Nombre"
         size="small"
         fullWidth
         variant="outlined"
         autoFocus
-        inputRef={register({
+        rules={{
           required: "Este campo es requerido",
           maxLength: {
             value: 70,
             message: "Demasiados caracteres",
           },
-        })}
+        }}
         error={errors.name ? true : false}
         helperText={errors?.name?.message}
+        defaultValue=""
       />
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="phone"
         label="Teléfono"
         size="small"
         fullWidth
         variant="outlined"
-        inputRef={register({
+        rules={{
           maxLength: {
             value: 15,
             message: "Demasiados caracteres",
           },
-        })}
+        }}
         error={errors.phone ? true : false}
         helperText={errors?.phone?.message}
+        defaultValue=""
       />
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="tice"
         label="Identificación"
         size="small"
         fullWidth
         variant="outlined"
-        inputRef={register({
+        rules={{
           maxLength: {
             value: 15,
             message: "Demasiados caracteres",
           },
-        })}
+        }}
         error={errors.tice ? true : false}
         helperText={errors?.tice?.message}
+        defaultValue=""
       />
     </Box>
   );

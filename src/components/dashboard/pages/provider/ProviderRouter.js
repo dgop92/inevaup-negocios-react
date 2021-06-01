@@ -13,6 +13,7 @@ import DjangoPaginationTable from "../commons/tables/DjangoPaginationTable";
 import GenericListView from "../commons/GenericListView";
 import GenericItemView from "../commons/GenericItemView";
 import { getGenericPaths } from "../pathUtils";
+import { Controller } from "react-hook-form";
 
 const genericPaths = getGenericPaths("providers");
 
@@ -111,48 +112,56 @@ export default function ItemRouter() {
   );
 }
 
-function InputBody({ register, errors }) {
+function InputBody({ control, errors }) {
   return (
     <Box display="grid" gridGap="1rem" my={2}>
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="name"
         label="Nombre"
         size="small"
         fullWidth
         variant="outlined"
         autoFocus
-        inputRef={register({
+        rules={{
           required: "Este campo es requerido",
           maxLength: {
             value: 70,
             message: "Demasiados caracteres",
           },
-        })}
+        }}
         error={errors.name ? true : false}
         helperText={errors?.name?.message}
+        defaultValue=""
       />
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="phone"
         label="Teléfono"
         size="small"
         fullWidth
         variant="outlined"
-        inputRef={register({
+        rules={{
           maxLength: {
             value: 15,
             message: "Demasiados caracteres",
           },
-        })}
+        }}
         error={errors.phone ? true : false}
         helperText={errors?.phone?.message}
+        defaultValue=""
       />
-      <TextField
+      <Controller
+        as={TextField}
+        control={control}
         name="email"
         label="Correo"
         size="small"
         fullWidth
         variant="outlined"
-        inputRef={register({
+        rules={{
           maxLength: {
             value: 70,
             message: "Demasiados caracteres",
@@ -161,9 +170,10 @@ function InputBody({ register, errors }) {
             value: /^\S+@\S+$/i,
             message: "Correo inválido",
           },
-        })}
+        }}
         error={errors.email ? true : false}
         helperText={errors?.email?.message}
+        defaultValue=""
       />
     </Box>
   );

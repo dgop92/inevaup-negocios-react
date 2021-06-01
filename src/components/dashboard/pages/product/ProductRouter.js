@@ -21,6 +21,7 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { FooterViewButton } from "../commons/SimpleViewCard";
 import { formatCurrency, ValueTypography } from "../../../utils";
+import { Controller } from "react-hook-form";
 
 const genericPaths = getGenericPaths("products");
 
@@ -204,81 +205,95 @@ function InputBody({ control, register, errors }) {
   return (
     <Grid container spacing={2} style={{ padding: "1rem 0" }}>
       <Grid item md={6} xs={12}>
-        <TextField
+        <Controller
+          as={TextField}
+          control={control}
           name="name"
           label="Nombre"
           size="small"
           fullWidth
           variant="outlined"
           autoFocus
-          inputRef={register({
+          rules={{
             required: "Este campo es requerido",
             maxLength: {
               value: 70,
               message: "Demasiados caracteres",
             },
-          })}
+          }}
           error={errors.name ? true : false}
           helperText={errors?.name?.message}
+          defaultValue=""
         />
       </Grid>
       <Grid item md={6} xs={12}>
-        <TextField
+        <Controller
+          as={TextField}
+          control={control}
           name="code"
           label="Código"
           size="small"
           fullWidth
           variant="outlined"
-          inputRef={register({
+          inputRef={{
             required: "Este campo es requerido",
             maxLength: {
               value: 70,
               message: "Demasiados caracteres",
             },
-          })}
+          }}
           error={errors.code ? true : false}
           helperText={errors?.code?.message}
+          defaultValue=""
         />
       </Grid>
       <Grid item xs={12}>
-        <TextField
+        <Controller
+          as={TextField}
+          control={control}
           name="details"
           label="Detalles"
           multiline
           rows={10}
           fullWidth
           variant="outlined"
-          inputRef={register}
           error={errors.details ? true : false}
           helperText={errors?.details?.message}
+          defaultValue=""
         />
       </Grid>
       <Grid item md={6} xs={12}>
-        <TextField
+        <Controller
+          as={TextField}
+          control={control}
           name="purchase_price"
           label="Precio compra"
           size="small"
           fullWidth
           variant="outlined"
-          inputRef={register({
+          rules={{
             required: "Este campo es requerido",
-          })}
+          }}
           error={errors.purchase_price ? true : false}
           helperText={errors?.purchase_price?.message}
+          defaultValue=""
         />
       </Grid>
       <Grid item md={6} xs={12}>
-        <TextField
+        <Controller
+          as={TextField}
+          control={control}
           name="sale_price"
           label="Precio venta"
           size="small"
           fullWidth
           variant="outlined"
-          inputRef={register({
+          rules={{
             required: "Este campo es requerido",
-          })}
+          }}
           error={errors.sale_price ? true : false}
           helperText={errors?.sale_price?.message}
+          defaultValue=""
         />
       </Grid>
       <Grid item md={6} xs={12}>
@@ -302,18 +317,20 @@ function InputBody({ control, register, errors }) {
         />
       </Grid>
       <Grid item md={6} xs={12}>
-        <TextField
+        <Controller
+          as={TextField}
+          control={control}
           name="stock"
           label="Stock"
           size="small"
           fullWidth
           variant="outlined"
-          defaultValue={"0"}
-          inputRef={register({
+          rules={{
             required: "Este campo es requerido",
-          })}
+          }}
           error={errors.stock ? true : false}
           helperText={errors?.stock?.message}
+          defaultValue=""
         />
       </Grid>
     </Grid>
@@ -410,9 +427,7 @@ function CustomItemView({ detailData: productData, footerProps }) {
             >
               Descripción
             </Typography>
-            <ValueTypography
-              value={productData?.details}
-            />
+            <ValueTypography value={productData?.details} />
           </Box>
         </Box>
         {/* Line 3 */}
