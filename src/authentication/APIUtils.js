@@ -21,7 +21,7 @@ export function useApiWithAuthToken() {
   };
 
   const globalFetchOptions = {
-    cachePolicy: 'no-cache',
+    cachePolicy: "no-cache",
     interceptors: {
       request: async ({ options, url, path, route }) => {
         options.headers.Authorization = `Bearer ${authToken}`;
@@ -40,6 +40,6 @@ export function useApiWithAuthToken() {
   return { authToken, setAuthToken, globalFetchOptions, httpStatus };
 }
 
-function isOverallError(statusCode){
-  return [500, 404, 403, 401].includes(statusCode)
+function isOverallError(statusCode) {
+  return [500, 405, 404, 403, 401].includes(statusCode);
 }

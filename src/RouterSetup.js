@@ -22,6 +22,13 @@ const errorRoutes = [
     },
   },
   {
+    path: "/405",
+    compProps: {
+      title: "405",
+      subTitle: "Acción no disponible",
+    },
+  },
+  {
     path: "/404",
     compProps: {
       title: "404",

@@ -96,9 +96,6 @@ function InvoiceContent() {
           style={{ marginBottom: "1rem", fontSize: SUBTITLE_FONT_SIZE }}
         >
           NIT: 32104054-1 <br></br>
-          REGIMEN SIMPLIFICADO <br></br>
-          METROCENTRO LOCAL 124 <br></br>
-          Teléfono: 3856176-3003647096 <br></br>
           FACTURA DE VENTA NO: {getValueFromRawValue(data?.pk)} <br></br>
         </Typography>
         <ProductList rows={data?.exit_sales} columns={columns} />
